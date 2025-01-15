@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Product } from "../types/product";
+import { Product } from "@/types/product";
 import Image from "next/image";
 import { truncateText } from "@/utils/textUtils";
 import { withAuth } from "@/components/withAuth";
@@ -268,12 +268,12 @@ function AdminProducts() {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Info */}
-    <div>
+          <div>
             <label htmlFor="name" className="block text-lg font-bold mb-2">
               Product Name
             </label>
-      <input
-        type="text"
+            <input
+              type="text"
               id="name"
               name="name"
               value={formData.name}
@@ -287,8 +287,8 @@ function AdminProducts() {
             <label htmlFor="price" className="block text-lg font-bold mb-2">
               Price
             </label>
-      <input
-        type="number"
+            <input
+              type="number"
               id="price"
               name="price"
               value={formData.price}
@@ -307,7 +307,7 @@ function AdminProducts() {
             >
               Description
             </label>
-      <textarea
+            <textarea
               id="description"
               name="description"
               value={formData.description}
@@ -349,8 +349,8 @@ function AdminProducts() {
                     <label className="block text-sm font-medium mb-1">
                       {key}
                     </label>
-      <input
-        type="text"
+                    <input
+                      type="text"
                       value={formData.specifications[key] || defaultValue}
                       onChange={(e) =>
                         handleSpecificationChange(key, e.target.value)
