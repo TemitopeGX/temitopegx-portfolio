@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 255, 255, 255;
+}
+
+@layer base {
+  body {
+    @apply bg-[#FFDE00];
+  }
+}
+
+@layer components {
+  .neo-brutalism-white {
+    @apply bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+  }
+
+  .neo-brutalism-blue {
+    @apply bg-[#2B3FF3] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+  }
+
+  .neo-brutalism-pink {
+    @apply bg-[#FF90E8] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+  }
+
+  .neo-brutalism-shadow {
+    @apply shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+  }
+
+  .neo-brutalism-button {
+    @apply px-6 py-3 bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+    hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all;
+  }
+
+  .neo-brutalism-card {
+    @apply bg-white border-2 border-black p-6 
+    shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+    hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] 
+    transition-all duration-300
+    hover:bg-[#FFDE00]/10;
+  }
+
+  .neo-brutalism-image {
+    @apply border-2 border-black relative
+    after:content-[''] after:absolute after:inset-0 
+    after:bg-black/0 hover:after:bg-black/10
+    after:transition-all after:duration-300;
+  }
+
+  .card-hover-effect {
+    @apply transition-all duration-300
+    hover:rotate-1 hover:scale-[1.02]
+    active:rotate-2 active:scale-[1.03];
+  }
+
+  .image-hover-effect {
+    @apply transition-all duration-500
+    hover:scale-[1.03] hover:rotate-1
+    group-hover:scale-[1.05];
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-[#2B3FF3] to-[#FF90E8]
+    bg-clip-text text-transparent;
+  }
+
+  .hover-lift {
+    @apply transition-transform duration-300
+    hover:-translate-y-1;
+  }
+}
+
+.typing-animation {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 1s steps(40, end);
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes erasing {
+  from {
+    width: 100%;
+    opacity: 1;
+  }
+  to {
+    width: 0;
+    opacity: 0;
+  }
+}
+
+.erasing-animation {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: erasing 1s steps(40, end);
+}
+
+/* Add new keyframe animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--rotation, 0deg));
+  }
+  50% {
+    transform: translateY(-20px) rotate(var(--rotation, 0deg));
+  }
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.shine-effect {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shine 3s linear infinite;
+}
+
+.shadow-brutal {
+  box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 1);
+}
+
+.neo-brutalism-image {
+  border: 2px solid black;
+  box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 1);
+  transition: all 0.3s ease;
+}
+
+.neo-brutalism-image:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 1);
+}
+
+/* Add any other global styles you're using */
+
+@media (max-width: 768px) {
+  .floating-shape-left {
+    @apply left-4 top-20 w-16 h-16;
+  }
+
+  .floating-shape-right {
+    @apply right-4 top-16 w-16 h-16;
+  }
+}
+
+.animate-typing {
+  display: inline-block;
+  white-space: nowrap;
+  animation: typing 0.5s ease-out forwards;
+  border-right: 4px solid #2b3ff3;
+}
+
+.animate-erasing {
+  display: inline-block;
+  white-space: nowrap;
+  animation: erasing 0.5s ease-in forwards;
+  border-right: 4px solid #2b3ff3;
+}
+
+.delay-150 {
+  animation-delay: 150ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
