@@ -16,6 +16,14 @@ const EXCHANGE_RATES: Record<CurrencyCode, number> = {
   KES: 145, // Kenyan Shilling
 };
 
+const CURRENCY_LABELS: Record<CurrencyCode, string> = {
+  USD: "USD ($)",
+  NGN: "NGN (₦)",
+  GHS: "GHS (₵)",
+  ZAR: "ZAR (R)",
+  KES: "KES (KSh)",
+};
+
 export default function Cart() {
   const { state, dispatch } = useCart();
   const [isOpen, setIsOpen] = useState(false);
@@ -290,16 +298,21 @@ export default function Cart() {
                       <span className="font-bold">Currency:</span>
                       <select
                         value={currency}
-                        onChange={(e) =>
-                          setCurrency(e.target.value as CurrencyCode)
-                        }
+                        onChange={(e) => {
+                          const newValue = e.target.value;
+                          if (isCurrencyCode(newValue)) {
+                            setCurrency(newValue);
+                          }
+                        }}
                         className="neo-brutalism-white p-2 border-2 border-black"
                       >
-                        <option value="USD">USD ($)</option>
-                        <option value="NGN">NGN (₦)</option>
-                        <option value="GHS">GHS (₵)</option>
-                        <option value="ZAR">ZAR (R)</option>
-                        <option value="KES">KES (KSh)</option>
+                        {Object.entries(CURRENCY_LABELS).map(
+                          ([code, label]) => (
+                            <option key={code} value={code}>
+                              {label}
+                            </option>
+                          )
+                        )}
                       </select>
                     </div>
                     <span className="text-2xl font-black">
@@ -341,4 +354,9 @@ export default function Cart() {
       )}
     </>
   );
+}
+
+// Type guard function
+function isCurrencyCode(value: string): value is CurrencyCode {
+  return value in EXCHANGE_RATES;
 }
