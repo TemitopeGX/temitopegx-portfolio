@@ -290,7 +290,9 @@ export default function Cart() {
                       <span className="font-bold">Currency:</span>
                       <select
                         value={currency}
-                        onChange={(e) => setCurrency(e.target.value)}
+                        onChange={(e) =>
+                          setCurrency(e.target.value as CurrencyCode)
+                        }
                         className="neo-brutalism-white p-2 border-2 border-black"
                       >
                         <option value="USD">USD ($)</option>
