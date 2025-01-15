@@ -24,6 +24,11 @@ const CURRENCY_LABELS: Record<CurrencyCode, string> = {
   KES: "KES (KSh)",
 };
 
+// Type guard function
+function isCurrencyCode(value: string): value is CurrencyCode {
+  return Object.keys(EXCHANGE_RATES).includes(value);
+}
+
 export default function Cart() {
   const { state, dispatch } = useCart();
   const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +40,15 @@ export default function Cart() {
   >("idle");
   const router = useRouter();
   const [currency, setCurrency] = useState<CurrencyCode>("USD");
+
+  const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    if (isCurrencyCode(value)) {
+      setCurrency(value);
+    } else {
+      console.error("Invalid currency code:", value);
+    }
+  };
 
   // Convert USD price to selected currency
   const convertPrice = (usdPrice: number) => {
@@ -298,12 +312,7 @@ export default function Cart() {
                       <span className="font-bold">Currency:</span>
                       <select
                         value={currency}
-                        onChange={(e) => {
-                          const newValue = e.target.value;
-                          if (isCurrencyCode(newValue)) {
-                            setCurrency(newValue);
-                          }
-                        }}
+                        onChange={handleCurrencyChange}
                         className="neo-brutalism-white p-2 border-2 border-black"
                       >
                         {Object.entries(CURRENCY_LABELS).map(
@@ -354,9 +363,4 @@ export default function Cart() {
       )}
     </>
   );
-}
-
-// Type guard function
-function isCurrencyCode(value: string): value is CurrencyCode {
-  return value in EXCHANGE_RATES;
 }
