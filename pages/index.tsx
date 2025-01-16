@@ -14,7 +14,7 @@ export default function Home() {
         <title>TemitopeGX - Creative Designer & Developer</title>
         <meta
           name="description"
-          content="Professional creative designer and developer specializing in brand identity, UI/UX, and web development."
+          content="Expert creative designer and full-stack developer specializing in brand identity, UI/UX design, web development, and digital solutions."
         />
       </Head>
 
