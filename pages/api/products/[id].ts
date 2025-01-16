@@ -8,6 +8,11 @@ export default async function handler(
 ) {
   const { id } = req.query;
 
+  // Validate id parameter
+  if (!id || Array.isArray(id)) {
+    return res.status(400).json({ error: "Invalid id parameter" });
+  }
+
   try {
     const client = await clientPromise;
     const db = client.db("ecommerce");
