@@ -178,10 +178,11 @@ export default function Store() {
                     dispatch({
                       type: "ADD_ITEM",
                       payload: {
-                        id: selectedProduct.id,
+                        id: selectedProduct._id,
                         name: selectedProduct.name,
                         price: selectedProduct.price,
-                        image: selectedProduct.image,
+                        image:
+                          selectedProduct.image || "/default-product-image.jpg",
                         quantity: 1,
                       },
                     });
