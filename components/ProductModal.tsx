@@ -39,7 +39,7 @@ const ProductModal = ({ product, isOpen, closeModal }: ProductModalProps) => {
             </div>
             <div>
               <p className="text-3xl font-bold text-[#2B3FF3] mb-4">
-                ₦{(product.price * 1000).toLocaleString()}
+                ₦{product.price.toLocaleString()}
               </p>
               <p className="text-gray-700 mb-4">{product.description}</p>
             </div>

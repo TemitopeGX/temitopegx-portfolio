@@ -87,7 +87,7 @@ export default function Store() {
       {/* Price Section */}
       <div className="mb-4">
         <span className="text-2xl font-black shine-effect">
-          ₦{(product.price * 1000).toLocaleString()}
+          ₦{product.price.toLocaleString()}
         </span>
       </div>
 
@@ -146,7 +146,7 @@ export default function Store() {
               Purchase Options for {selectedProduct?.name}
             </h2>
             <p className="text-xl font-bold text-[#2B3FF3] mb-4">
-              ₦{(selectedProduct?.price ?? 0 * 1000).toLocaleString()}
+              ₦{selectedProduct?.price.toLocaleString()}
             </p>
             <div className="flex flex-col space-y-4">
               {selectedProduct?.selarLink && (
