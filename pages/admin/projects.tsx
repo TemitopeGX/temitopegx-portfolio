@@ -1,38 +1,45 @@
-import { useState } from 'react'
-import Layout from '../../components/Layout'
+import { useState } from "react";
+import Layout from "../../components/Layout";
+
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+}
 
 const ProjectsAdmin = () => {
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [image, setImage] = useState('')
-  const [projects, setProjects] = useState([])
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
+  const [projects, setProjects] = useState<Project[]>([]);
 
   const handleAddProject = () => {
-    const newProject = {
+    const newProject: Project = {
       id: projects.length + 1,
       title,
       description,
       image,
-    }
-    setProjects([...projects, newProject])
-    clearForm()
-  }
+    };
+    setProjects([...projects, newProject]);
+    clearForm();
+  };
 
-  const handleDeleteProject = (id) => {
-    setProjects(projects.filter(project => project.id !== id))
-  }
+  const handleDeleteProject = (id: number) => {
+    setProjects(projects.filter((project) => project.id !== id));
+  };
 
   const clearForm = () => {
-    setTitle('')
-    setDescription('')
-    setImage('')
-  }
+    setTitle("");
+    setDescription("");
+    setImage("");
+  };
 
   return (
     <Layout>
       <div className="max-w-4xl mx-auto p-6">
         <h1 className="text-3xl font-bold mb-4">Manage Projects</h1>
-        
+
         <div className="mb-6">
           <h2 className="text-2xl font-semibold mb-2">Add New Project</h2>
           <input
@@ -66,8 +73,11 @@ const ProjectsAdmin = () => {
         <div>
           <h2 className="text-2xl font-semibold mb-2">Manage Projects</h2>
           <ul>
-            {projects.map(project => (
-              <li key={project.id} className="flex justify-between items-center mb-2">
+            {projects.map((project) => (
+              <li
+                key={project.id}
+                className="flex justify-between items-center mb-2"
+              >
                 <span>{project.title}</span>
                 <div>
                   <button
@@ -83,7 +93,7 @@ const ProjectsAdmin = () => {
         </div>
       </div>
     </Layout>
-  )
-}
+  );
+};
 
-export default ProjectsAdmin 
+export default ProjectsAdmin;
