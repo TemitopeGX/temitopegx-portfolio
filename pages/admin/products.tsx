@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Product } from "@/types/product";
+import { Product } from "../../types/product";
 import Image from "next/image";
 import { truncateText } from "@/utils/textUtils";
 import { withAuth } from "@/components/withAuth";
