@@ -34,20 +34,20 @@ export default function Hero() {
   return (
     <section className="min-h-screen flex items-center justify-center bg-[#FFDE00] relative">
       {/* Floating Shapes */}
-      <div className="absolute left-20 top-40 w-40 h-40 bg-[#2B3FF3] transform -rotate-3 shadow-brutal floating-shape-left" />
-      <div className="absolute right-20 top-20 w-40 h-40 bg-[#FF90E8] transform rotate-3 shadow-brutal floating-shape-right" />
+      <div className="absolute left-20 top-40 w-32 h-32 bg-[#2B3FF3] transform -rotate-3 shadow-brutal floating-shape-left" />
+      <div className="absolute right-20 top-20 w-32 h-32 bg-[#FF90E8] transform rotate-3 shadow-brutal floating-shape-right" />
 
       {/* Main Content Card */}
-      <div className="bg-white border-2 border-black p-20 max-w-5xl mx-4 transform rotate-2 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-        <h1 className="text-6xl md:text-8xl font-black text-center mb-8">
+      <div className="bg-white border-2 border-black p-12 max-w-4xl mx-4 transform rotate-2 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <h1 className="text-5xl md:text-7xl font-black text-center mb-6">
           Welcome to TemitopeGX
         </h1>
-        <div className="space-y-6 mb-12">
-          <p className="text-center text-3xl font-bold">
+        <div className="space-y-4 mb-8">
+          <p className="text-center text-2xl font-bold">
             Home of <span className="text-[#2B3FF3]">Oasis Graphix</span>
           </p>
           <div className="flex items-center justify-center space-x-3">
-            <p className="text-3xl font-bold">Specializing in</p>
+            <p className="text-2xl font-bold">Specializing in</p>
             <div className="relative h-12 w-[300px] flex items-center">
               <span
                 className={`text-[#2B3FF3] text-3xl font-black absolute left-0 ${

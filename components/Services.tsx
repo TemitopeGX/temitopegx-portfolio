@@ -10,26 +10,26 @@ import {
 
 export default function Services() {
   return (
-    <section className="py-32 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="neo-brutalism-pink p-10 mb-16 transform rotate-1 max-w-4xl mx-auto">
-          <h2 className="text-5xl md:text-6xl font-bold text-center">
+    <section className="py-20 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="neo-brutalism-pink p-8 mb-12 transform rotate-1 max-w-3xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold text-center">
             Our Services
           </h2>
-          <p className="text-center text-2xl mt-4">Creating Digital Magic</p>
+          <p className="text-center text-xl mt-3">Creating Digital Magic</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-12">
+        <div className="grid md:grid-cols-3 gap-8">
           {/* Graphic Design */}
-          <div className="neo-brutalism-white p-10 transform hover:-rotate-1">
-            <div className="bg-[#FFDE00] w-20 h-20 flex items-center justify-center mb-8">
+          <div className="neo-brutalism-white p-8 transform hover:-rotate-1">
+            <div className="bg-[#FFDE00] w-16 h-16 flex items-center justify-center mb-6">
               <FontAwesomeIcon
                 icon={faPaintBrush}
-                className="text-4xl text-black"
+                className="text-3xl text-black"
               />
             </div>
-            <h3 className="text-3xl font-bold mb-6">Graphic Design</h3>
-            <ul className="space-y-4 text-lg">
+            <h3 className="text-2xl font-bold mb-4">Graphic Design</h3>
+            <ul className="space-y-3 text-base">
               <li>Brand Identity Design</li>
               <li>Logo Design</li>
               <li>Marketing Material</li>
@@ -37,30 +37,30 @@ export default function Services() {
           </div>
 
           {/* Web Development */}
-          <div className="neo-brutalism-white p-10 transform hover:rotate-1">
-            <div className="bg-[#FFDE00] w-20 h-20 flex items-center justify-center mb-8">
+          <div className="neo-brutalism-white p-8 transform hover:rotate-1">
+            <div className="bg-[#FFDE00] w-16 h-16 flex items-center justify-center mb-6">
               <FontAwesomeIcon
                 icon={faLaptopCode}
-                className="text-4xl text-black"
+                className="text-3xl text-black"
               />
             </div>
-            <h3 className="text-3xl font-bold mb-6">Web Development</h3>
-            <p className="text-lg">
+            <h3 className="text-2xl font-bold mb-4">Web Development</h3>
+            <p className="text-base">
               Custom responsive websites and web applications built with modern
               technologies.
             </p>
           </div>
 
           {/* Media Services */}
-          <div className="neo-brutalism-white p-10 transform hover:-rotate-1">
-            <div className="bg-[#FFDE00] w-20 h-20 flex items-center justify-center mb-8">
+          <div className="neo-brutalism-white p-8 transform hover:-rotate-1">
+            <div className="bg-[#FFDE00] w-16 h-16 flex items-center justify-center mb-6">
               <FontAwesomeIcon
                 icon={faCamera}
-                className="text-4xl text-black"
+                className="text-3xl text-black"
               />
             </div>
-            <h3 className="text-3xl font-bold mb-6">Media Services</h3>
-            <p className="text-lg">
+            <h3 className="text-2xl font-bold mb-4">Media Services</h3>
+            <p className="text-base">
               Professional media production, content creation, and digital
               marketing solutions.
             </p>
