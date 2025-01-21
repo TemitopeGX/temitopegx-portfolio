@@ -37,7 +37,7 @@ export default function Contact() {
       const whatsappMessage = `*New Contact Form Message*\n\nName: ${formData.name}\nEmail: ${formData.email}\nSubject: ${formData.subject}\nMessage: ${formData.message}`;
 
       // Format the phone number (remove any spaces or special characters)
-      const phoneNumber = "+2347030513326";
+      const phoneNumber = "+2347071785772";
 
       // Create the WhatsApp URL
       const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
@@ -75,8 +75,8 @@ export default function Contact() {
     {
       icon: faPhone,
       label: "Phone",
-      value: "+234 703 051 3326",
-      href: "tel:+2347030513326",
+      value: "+234 906 0462 586",
+      href: "tel:+2349060462586",
     },
     {
       icon: faLocationDot,
