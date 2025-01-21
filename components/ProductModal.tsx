@@ -1,4 +1,6 @@
-import React from "react";
+import { Dialog as HeadlessDialog } from "@headlessui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { Product } from "../types/product";
 
@@ -8,82 +10,135 @@ interface ProductModalProps {
   closeModal: () => void;
 }
 
-const ProductModal = ({ product, isOpen, closeModal }: ProductModalProps) => {
-  if (!isOpen || !product) return null;
+export default function ProductModal({
+  product,
+  isOpen,
+  closeModal,
+}: ProductModalProps) {
+  if (!product) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto neo-brutalism-white">
-        <div className="p-6">
-          {/* Header */}
-          <div className="flex justify-between items-start mb-6">
-            <h2 className="text-3xl font-bold">{product.name}</h2>
-            <button
-              onClick={closeModal}
-              className="neo-brutalism-button bg-red-500 text-white"
-            >
-              Close
-            </button>
+    <HeadlessDialog
+      open={isOpen}
+      onClose={closeModal}
+      className="fixed inset-0 z-50 overflow-y-auto"
+    >
+      <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
+
+      <div className="fixed inset-0 flex items-center justify-center p-4">
+        <HeadlessDialog.Panel className="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-white">
+          {/* Background Elements */}
+          <div className="absolute inset-0">
+            <div className="dot-pattern opacity-30" />
+            <div className="grid-pattern opacity-20" />
           </div>
+          <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-[#2B3FF3]/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-[#6F3FF3]/10 rounded-full blur-3xl" />
 
-          {/* Image and Basic Info */}
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div className="relative aspect-square">
-              <Image
-                src={product.image || "/images/product1.jpg"}
-                alt={product.name}
-                width={400}
-                height={400}
-                className="rounded-lg"
-              />
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-[#2B3FF3] mb-4">
-                ₦{product.price.toLocaleString()}
-              </p>
-              <p className="text-gray-700 mb-4">{product.description}</p>
-            </div>
-          </div>
+          {/* Content */}
+          <div className="relative">
+            <div className="grid grid-cols-2 gap-6">
+              {/* Left Column - Image */}
+              <div className="relative h-[500px]">
+                <Image
+                  src={product.image || "/images/product1.jpg"}
+                  alt={product.name}
+                  fill
+                  className="object-contain"
+                />
+                <button
+                  onClick={closeModal}
+                  className="absolute top-4 right-4 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors"
+                >
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className="h-4 w-4 text-gray-600"
+                  />
+                </button>
+              </div>
 
-          {/* Features */}
-          {product.details?.features && (
-            <div className="mb-6">
-              <h3 className="text-xl font-bold mb-3">Features</h3>
-              <ul className="list-disc list-inside space-y-2">
-                {product.details.features.map((feature, index) => (
-                  <li key={index}>{feature}</li>
-                ))}
-              </ul>
-            </div>
-          )}
+              {/* Right Column - Details */}
+              <div className="p-6 space-y-6 max-h-[500px] overflow-y-auto">
+                {/* Title and Price */}
+                <div>
+                  <HeadlessDialog.Title className="text-2xl font-bold text-gradient-animate mb-2">
+                    {product.name}
+                  </HeadlessDialog.Title>
+                  <p className="text-2xl font-bold text-[#2B3FF3]">
+                    ₦{product.price.toLocaleString()}
+                  </p>
+                </div>
 
-          {/* Specifications */}
-          {product.details?.specifications && (
-            <div className="mb-6">
-              <h3 className="text-xl font-bold mb-3">Specifications</h3>
-              <div className="grid grid-cols-2 gap-4">
-                {Object.entries(product.details.specifications).map(
-                  ([key, value]) => (
-                    <div key={key} className="neo-brutalism-white p-3">
-                      <span className="font-bold">{key}:</span> {value}
-                    </div>
-                  )
+                {/* Description */}
+                <div className="space-y-2">
+                  <h4 className="text-lg font-semibold text-gray-900">
+                    Description
+                  </h4>
+                  <p className="text-base text-gray-600">
+                    {product.description}
+                  </p>
+                </div>
+
+                {/* Details Section */}
+                {product.details && (
+                  <>
+                    {/* Features */}
+                    {product.details.features &&
+                      product.details.features.length > 0 && (
+                        <div className="space-y-3">
+                          <h4 className="text-lg font-semibold text-gray-900">
+                            Features
+                          </h4>
+                          <ul className="grid grid-cols-2 gap-2">
+                            {product.details.features.map(
+                              (feature: string, index: number) => (
+                                <li
+                                  key={index}
+                                  className="flex items-center text-sm text-gray-600"
+                                >
+                                  <span className="w-1.5 h-1.5 bg-gradient-to-r from-[#2B3FF3] to-[#6F3FF3] rounded-full mr-2" />
+                                  {feature}
+                                </li>
+                              )
+                            )}
+                          </ul>
+                        </div>
+                      )}
+
+                    {/* Specifications */}
+                    {product.details.specifications &&
+                      Object.keys(product.details.specifications).length >
+                        0 && (
+                        <div className="space-y-3">
+                          <h4 className="text-lg font-semibold text-gray-900">
+                            Specifications
+                          </h4>
+                          <dl className="grid grid-cols-2 gap-3">
+                            {Object.entries(product.details.specifications).map(
+                              ([key, value]) => (
+                                <div
+                                  key={key}
+                                  className="glass-card p-3 rounded-lg"
+                                >
+                                  <dt className="text-sm font-medium text-gray-500">
+                                    {key}
+                                  </dt>
+                                  <dd className="mt-1 text-sm text-gray-900">
+                                    {String(value)}
+                                  </dd>
+                                </div>
+                              )
+                            )}
+                          </dl>
+                        </div>
+                      )}
+                  </>
                 )}
               </div>
             </div>
-          )}
-
-          {/* Purchase Button */}
-          <button
-            onClick={closeModal}
-            className="neo-brutalism-button bg-[#2B3FF3] text-white w-full"
-          >
-            Purchase Now
-          </button>
-        </div>
+          </div>
+        </HeadlessDialog.Panel>
       </div>
-    </div>
+    </HeadlessDialog>
   );
-};
-
-export default ProductModal;
+}
