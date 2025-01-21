@@ -241,6 +241,13 @@ const services: Service[] = [
 export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [hoveredFeature, setHoveredFeature] = useState<string | null>(null);
+  const [expandedCards, setExpandedCards] = useState<number[]>([]);
+
+  const toggleCard = (id: number) => {
+    setExpandedCards((prev) =>
+      prev.includes(id) ? prev.filter((cardId) => cardId !== id) : [...prev, id]
+    );
+  };
 
   return (
     <Layout>
@@ -287,62 +294,156 @@ export default function ServicesPage() {
         </section>
 
         {/* Services Grid */}
-        <section
-          id="services"
-          className="minimalist-section relative overflow-hidden"
-        >
-          <div className="minimalist-container relative">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((service, index) => (
-                <div
-                  key={service.id}
-                  className="group fade-in"
-                  style={{ animationDelay: `${index * 150}ms` }}
-                  onClick={() => setSelectedService(service)}
-                >
-                  <div className="gradient-border card-hover-effect cursor-pointer">
-                    <div className="gradient-border-content p-8">
-                      <div className="flex flex-col h-full">
-                        {/* Service Icon */}
-                        <div className="mb-6 transform transition-transform duration-500 group-hover:scale-110">
-                          <div className="w-16 h-16 bg-gradient-to-br from-[#2B3FF3] to-[#6F3FF3] rounded-xl flex items-center justify-center glow-effect">
-                            <FontAwesomeIcon
-                              icon={service.icon}
-                              className="text-2xl text-white"
-                            />
-                          </div>
-                        </div>
+        <section id="services" className="py-12 sm:py-24 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <h2 className="text-4xl font-bold mb-6 text-gradient-animate">
+                Our Services
+              </h2>
+              <p className="text-xl text-gray-600">
+                Transforming ideas into exceptional digital experiences through
+                innovative design and development
+              </p>
+            </div>
 
-                        {/* Service Title & Description */}
-                        <h3 className="text-xl font-bold mb-4 text-gradient-animate">
-                          {service.title}
-                        </h3>
-                        <p className="text-gray-600 mb-6">
-                          {service.description}
-                        </p>
-
-                        {/* View Details Button */}
-                        <button className="mt-auto text-[#2B3FF3] font-medium flex items-center group">
-                          View Details
-                          <FontAwesomeIcon
-                            icon={faArrowRight}
-                            className="ml-2 transform group-hover:translate-x-1 transition-transform"
-                          />
-                        </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {services.map((service) => {
+                const isExpanded = expandedCards.includes(service.id);
+                return (
+                  <div
+                    key={service.id}
+                    className="bg-white rounded-xl shadow-lg p-6"
+                  >
+                    {/* Service Icon */}
+                    <div className="mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-[#2B3FF3] to-[#6F3FF3] rounded-xl flex items-center justify-center">
+                        <FontAwesomeIcon
+                          icon={service.icon}
+                          className="text-2xl text-white"
+                        />
                       </div>
                     </div>
+
+                    {/* Service Title & Description */}
+                    <h3 className="text-xl font-bold mb-4">{service.title}</h3>
+                    <p className="text-gray-600 mb-6">{service.description}</p>
+
+                    {/* Features Preview */}
+                    <div className="space-y-3 mb-6">
+                      <h4 className="font-medium text-gray-700 mb-2">
+                        Features
+                      </h4>
+                      {service.features
+                        .slice(0, isExpanded ? undefined : 3)
+                        .map((feature) => (
+                          <div
+                            key={feature}
+                            className="flex items-center space-x-2 text-gray-600"
+                          >
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#2B3FF3]" />
+                            <span>{feature}</span>
+                          </div>
+                        ))}
+                    </div>
+
+                    {/* Expandable Content */}
+                    {isExpanded && (
+                      <>
+                        {/* Technologies or Deliverables */}
+                        {(service.technologies || service.deliverables) && (
+                          <div className="pt-4 border-t border-gray-100">
+                            <h4 className="text-sm font-medium text-gray-700 mb-2">
+                              {service.technologies
+                                ? "Technologies"
+                                : "Deliverables"}
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {(
+                                service.technologies || service.deliverables
+                              )?.map((item) => (
+                                <span
+                                  key={item}
+                                  className="text-xs px-3 py-1 rounded-full bg-[#2B3FF3]/10 text-[#2B3FF3]"
+                                >
+                                  {item}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Process */}
+                        {service.process && (
+                          <div className="mt-6 pt-4 border-t border-gray-100">
+                            <h4 className="font-medium text-gray-700 mb-2">
+                              Our Process
+                            </h4>
+                            <div className="space-y-3">
+                              {service.process.map((step, index) => (
+                                <div
+                                  key={step}
+                                  className="flex items-center space-x-3"
+                                >
+                                  <span className="w-6 h-6 rounded-full bg-[#2B3FF3] text-white flex items-center justify-center text-sm">
+                                    {index + 1}
+                                  </span>
+                                  <span className="text-gray-600">{step}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Benefits */}
+                        {service.benefits && (
+                          <div className="mt-6 pt-4 border-t border-gray-100">
+                            <h4 className="font-medium text-gray-700 mb-2">
+                              Key Benefits
+                            </h4>
+                            <div className="space-y-3">
+                              {service.benefits.map((benefit) => (
+                                <div
+                                  key={benefit}
+                                  className="flex items-center space-x-2"
+                                >
+                                  <div className="w-1.5 h-1.5 rounded-full bg-[#2B3FF3]" />
+                                  <span className="text-gray-600">
+                                    {benefit}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
+
+                    <div className="mt-6 pt-4 border-t border-gray-100 space-y-4">
+                      <button
+                        onClick={() => toggleCard(service.id)}
+                        className="block w-full text-[#2B3FF3] text-center py-2 rounded-xl border border-[#2B3FF3] hover:bg-[#2B3FF3]/5 transition-colors"
+                      >
+                        {isExpanded ? "Show Less" : "Show More"}
+                      </button>
+                      <Link
+                        href="/contact"
+                        className="block w-full bg-[#2B3FF3] text-white text-center py-3 rounded-xl hover:bg-[#2B3FF3]/90 transition-colors"
+                      >
+                        Get Started
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
 
-        {/* Service Details Modal */}
-        {selectedService && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="p-8">
+        {/* Service Details Modal - Only shown on larger screens */}
+        {selectedService && window.innerWidth > 640 && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-white rounded-2xl w-full max-w-4xl my-8">
+              <div className="p-6 sm:p-8">
                 <div className="flex justify-between items-start mb-8">
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-[#2B3FF3] to-[#6F3FF3] rounded-xl flex items-center justify-center">
@@ -363,7 +464,7 @@ export default function ServicesPage() {
                   </button>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-8">
+                <div className="grid sm:grid-cols-2 gap-8">
                   <div>
                     <h3 className="font-medium text-lg mb-4 text-gradient-animate">
                       Features
