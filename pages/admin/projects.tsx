@@ -494,8 +494,15 @@ const ProjectsAdmin = () => {
                         onClick={() => {
                           setEditingProject(project);
                           setFormData({
-                            ...project,
+                            title: project.title,
+                            category: project.category,
+                            description: project.description,
+                            challenge: project.challenge || "",
+                            solution: project.solution || "",
+                            image: project.image,
                             tags: project.tags.join(", "),
+                            link: project.link || "",
+                            featured: project.featured,
                           });
                           setShowForm(true);
                         }}
