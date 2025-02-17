@@ -38,12 +38,7 @@ export default function Contact() {
         body: JSON.stringify(formData),
       });
 
-<<<<<<< HEAD
       if (!response.ok) throw new Error("Failed to send message");
-=======
-      // Format the phone number (remove any spaces or special characters)
-      const phoneNumber = "+2347071785772";
->>>>>>> fd47e66757ec04cc50a50dcd721ebdb12f68e1dc
 
       toast.success("Message sent successfully!");
       setFormData({ name: "", email: "", subject: "", message: "" });
@@ -73,13 +68,8 @@ export default function Contact() {
     {
       icon: faPhone,
       label: "Phone",
-<<<<<<< HEAD
       value: "+234 906 046 2586",
       link: "tel:+2349060462586",
-=======
-      value: "+234 906 0462 586",
-      href: "tel:+2349060462586",
->>>>>>> fd47e66757ec04cc50a50dcd721ebdb12f68e1dc
     },
     {
       icon: faMapMarkerAlt,

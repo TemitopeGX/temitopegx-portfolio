@@ -13,10 +13,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import Link from "next/link";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 interface Service {
   id: number;
-  icon: any;
+  icon: IconDefinition;
   title: string;
   description: string;
   features: string[];
@@ -29,37 +30,69 @@ const services: Service[] = [
     id: 1,
     icon: faPalette,
     title: "Brand Identity",
-    description: "Logo Design, Brand Guidelines & Visual Identity",
+    description:
+      "Create a unique and memorable brand identity that resonates with your target audience.",
+    features: [
+      "Logo Design",
+      "Brand Guidelines",
+      "Visual Identity",
+      "Brand Strategy",
+    ],
   },
   {
     id: 2,
     icon: faCode,
     title: "Web Development",
     description: "Custom Websites, E-commerce & Web Applications",
+    features: [
+      "Custom Websites",
+      "E-commerce",
+      "Web Applications",
+      "API Integration",
+    ],
   },
   {
     id: 3,
     icon: faMobileScreen,
     title: "UI/UX Design",
     description: "User Interface & Experience Design",
+    features: [
+      "Wireframing",
+      "Prototyping",
+      "User Research",
+      "Interface Design",
+    ],
   },
   {
     id: 4,
     icon: faLaptopCode,
     title: "Frontend Dev",
     description: "Responsive & Interactive Web Interfaces",
+    features: [
+      "React/Next.js",
+      "Responsive Design",
+      "Performance",
+      "Animations",
+    ],
   },
   {
     id: 5,
     icon: faGlobe,
     title: "Digital Marketing",
     description: "Social Media, SEO & Content Strategy",
+    features: ["Social Media", "SEO", "Content Strategy", "Analytics"],
   },
   {
     id: 6,
     icon: faRocket,
     title: "Product Launch",
     description: "Go-to-Market Strategy & Implementation",
+    features: [
+      "Launch Strategy",
+      "Market Research",
+      "Campaign Planning",
+      "Growth Hacking",
+    ],
   },
 ];
 
