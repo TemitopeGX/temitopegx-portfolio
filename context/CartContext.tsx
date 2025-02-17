@@ -1,5 +1,11 @@
 "use client";
-import { createContext, useContext, useReducer, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useReducer,
+  ReactNode,
+  useState,
+} from "react";
 
 interface CartItem {
   id: string;
@@ -20,13 +26,19 @@ type CartAction =
   | { type: "UPDATE_QUANTITY"; payload: { id: string; quantity: number } }
   | { type: "CLEAR_CART" };
 
-const CartContext = createContext<
-  | {
-      state: CartState;
-      dispatch: React.Dispatch<CartAction>;
-    }
-  | undefined
->(undefined);
+export const CartContext = createContext<{
+  cartItems: CartItem[];
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  state: CartState;
+  dispatch: React.Dispatch<CartAction>;
+}>({
+  cartItems: [],
+  isOpen: false,
+  setIsOpen: () => {},
+  state: { items: [], total: 0 },
+  dispatch: () => {},
+});
 
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
@@ -88,9 +100,18 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, { items: [], total: 0 });
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <CartContext.Provider value={{ state, dispatch }}>
+    <CartContext.Provider
+      value={{
+        cartItems: state.items,
+        isOpen,
+        setIsOpen,
+        state,
+        dispatch,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

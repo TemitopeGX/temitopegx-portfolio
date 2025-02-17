@@ -17,10 +17,10 @@ type CurrencyCode = "USD" | "NGN" | "GHS" | "ZAR" | "KES";
 
 const EXCHANGE_RATES: Record<CurrencyCode, number> = {
   USD: 1,
-  NGN: 1500, // Current rate USD to NGN
-  GHS: 12.5, // Ghana Cedis
-  ZAR: 19, // South African Rand
-  KES: 145, // Kenyan Shilling
+  NGN: 1, // Remove the multiplication since prices are already in NGN
+  GHS: 12.5,
+  ZAR: 19,
+  KES: 145,
 };
 
 const CURRENCY_LABELS: Record<CurrencyCode, string> = {
@@ -37,16 +37,15 @@ function isCurrencyCode(value: string): value is CurrencyCode {
 }
 
 export default function Cart() {
-  const { state, dispatch } = useCart();
-  const [isOpen, setIsOpen] = useState(false);
+  const { state, dispatch, isOpen, setIsOpen } = useCart();
+  const router = useRouter();
+  const [currency, setCurrency] = useState<CurrencyCode>("NGN");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<
     "idle" | "processing" | "success" | "failed"
   >("idle");
-  const router = useRouter();
-  const [currency, setCurrency] = useState<CurrencyCode>("USD");
 
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -58,9 +57,13 @@ export default function Cart() {
   };
 
   // Convert USD price to selected currency
-  const convertPrice = (usdPrice: number) => {
-    const convertedAmount = usdPrice * EXCHANGE_RATES[currency];
-    return currency === "USD" ? usdPrice : convertedAmount;
+  const convertPrice = (price: number) => {
+    // If currency is NGN, return the price as is
+    if (currency === "NGN") {
+      return price;
+    }
+    // For other currencies, convert from NGN to the target currency
+    return price / EXCHANGE_RATES[currency];
   };
 
   // Format price based on currency
@@ -73,6 +76,8 @@ export default function Cart() {
       NGN: new Intl.NumberFormat("en-NG", {
         style: "currency",
         currency: "NGN",
+        minimumFractionDigits: 0, // Remove decimal places for Naira
+        maximumFractionDigits: 0,
       }),
       GHS: new Intl.NumberFormat("en-GH", {
         style: "currency",
@@ -228,15 +233,18 @@ export default function Cart() {
         onError={() => setError("Failed to load payment system")}
       />
 
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 bg-neon-green text-dark px-6 py-3 rounded-xl font-semibold hover:bg-neon-green/90 transition-colors flex items-center gap-2 shadow-lg"
+      {/* Floating Cart Button */}
+      {/* <button
+        onClick={toggleCart}
+        className="fixed bottom-4 right-4 z-50 bg-neon-green text-dark p-4 rounded-full shadow-lg hover:bg-neon-green/90 transition-colors"
       >
-        <FontAwesomeIcon icon={faShoppingCart} />
-        <span>
-          Cart ({state.items.reduce((acc, item) => acc + item.quantity, 0)})
-        </span>
-      </button>
+        <FontAwesomeIcon icon={faShoppingCart} className="text-xl" />
+        {cartItems.length > 0 && (
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">
+            {cartItems.length}
+          </span>
+        )}
+      </button> */}
 
       {isOpen && (
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">

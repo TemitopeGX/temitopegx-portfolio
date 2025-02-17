@@ -2,12 +2,19 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faTimes,
+  faShoppingCart,
+} from "@fortawesome/free-solid-svg-icons";
+import { useCart } from "@/context/CartContext";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const router = useRouter();
+  const { cartItems, isOpen, setIsOpen } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,7 +27,7 @@ export default function Navbar() {
 
   // Close mobile menu when route changes
   useEffect(() => {
-    setIsOpen(false);
+    setIsMobileMenuOpen(false);
   }, [router.pathname]);
 
   const navLinks = [
@@ -34,80 +41,64 @@ export default function Navbar() {
   const isActive = (path: string) => router.pathname === path;
 
   return (
-    <nav className="fixed w-full z-50 bg-dark/80 backdrop-blur-md border-b border-neon-green/20">
-      <div className="max-w-7xl mx-auto px-4 h-20">
-        <div className="flex items-center justify-between h-full">
-          {/* Logo */}
-          <Link href="/" className="text-2xl font-bold text-white">
-            TemitopéGX
-            <span className="w-2 h-2 bg-neon-green inline-block ml-1 rounded-full"></span>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-dark/80 backdrop-blur-md border-b border-neon-green/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Left side - Logo */}
+          <Link href="/" className="text-xl font-bold">
+            Temitope<span className="text-neon-green">GX</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/"
-              className="text-gray-300 hover:text-neon-green transition-colors"
-            >
-              Home
-            </Link>
-            <Link
-              href="/services"
-              className="text-gray-300 hover:text-neon-green transition-colors"
-            >
-              Services
-            </Link>
-            <Link
-              href="/portfolio"
-              className="text-gray-300 hover:text-neon-green transition-colors"
-            >
-              Portfolio
-            </Link>
-            <Link
-              href="/store"
-              className="text-gray-300 hover:text-neon-green transition-colors"
-            >
-              Store
-            </Link>
-            <Link href="/contact" className="neon-button">
-              Get in Touch
-            </Link>
+          {/* Navigation Links */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-gray-300 hover:text-neon-green transition-colors ${
+                  isActive(link.href) ? "text-neon-green" : ""
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-white"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {/* Right side - Cart Button */}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsOpen(true)}
+              className="relative p-2 text-gray-400 hover:text-neon-green transition-colors"
             >
-              {isOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
+              <FontAwesomeIcon icon={faShoppingCart} className="text-xl" />
+              <AnimatePresence>
+                {cartItems?.length > 0 && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="absolute -top-1 -right-1 bg-neon-green text-dark w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold"
+                  >
+                    {cartItems.length}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden text-white"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <FontAwesomeIcon icon={isMobileMenuOpen ? faTimes : faBars} />
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
         <div
           className={`md:hidden absolute left-0 right-0 bg-dark-200 transition-all duration-300 ease-in-out ${
-            isOpen ? "top-20 opacity-100" : "-top-96 opacity-0"
+            isMobileMenuOpen ? "top-20 opacity-100" : "-top-96 opacity-0"
           }`}
         >
           <div className="p-4 space-y-4">

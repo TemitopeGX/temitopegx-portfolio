@@ -20,8 +20,8 @@ const Hero = () => {
               </span>
             </h1>
             <p className="text-gray-400 text-lg md:text-xl mb-8 max-w-2xl">
-              Creative designer and developer crafting innovative digital
-              experiences
+              Hi, I'm TemitopeGX, a professional graphic designer, web designer,
+              and live event streamer.
             </p>
             <div className="flex flex-wrap gap-4 justify-center md:justify-start">
               <Link href="/portfolio" className="neon-button">

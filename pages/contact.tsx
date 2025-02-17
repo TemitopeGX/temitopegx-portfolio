@@ -17,6 +17,8 @@ import {
   faBehance,
 } from "@fortawesome/free-brands-svg-icons";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+import ScrollAnimation from "@/components/ScrollAnimation";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -32,16 +34,23 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      // Format the message for WhatsApp
+      const whatsappMessage = `*New Message from Portfolio*\n\nName: ${formData.name}\nEmail: ${formData.email}\nSubject: ${formData.subject}\n\nMessage: ${formData.message}`;
 
-      if (!response.ok) throw new Error("Failed to send message");
+      // Format the phone number (remove any spaces or special characters)
+      const phoneNumber = "+2349060462586";
 
-      toast.success("Message sent successfully!");
+      // Create WhatsApp URL
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+        whatsappMessage
+      )}`;
+
+      // Open WhatsApp in new tab
+      window.open(whatsappUrl, "_blank");
+
+      // Clear the form
       setFormData({ name: "", email: "", subject: "", message: "" });
+      toast.success("Message sent successfully!");
     } catch (error) {
       toast.error("Failed to send message. Please try again.");
     } finally {
@@ -112,25 +121,33 @@ export default function Contact() {
         />
       </Head>
 
-      <div className="min-h-screen bg-dark">
-        {/* Header Section */}
-        <div className="bg-dark-200 border-b border-neon-green/10">
-          <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-            <div className="text-center">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="min-h-screen bg-dark"
+      >
+        <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <ScrollAnimation>
               <h1 className="text-4xl md:text-5xl font-bold mb-6">
                 Get in <span className="text-neon-green">Touch</span>
               </h1>
+            </ScrollAnimation>
+            <ScrollAnimation delay={0.2}>
               <p className="text-gray-400 max-w-2xl mx-auto">
                 Have a project in mind? Let's discuss how we can work together
                 to bring your ideas to life.
               </p>
-            </div>
+            </ScrollAnimation>
           </div>
         </div>
+      </motion.div>
 
-        <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Contact Information */}
+      <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Contact Information */}
+          <ScrollAnimation>
             <div className="space-y-8">
               <div className="bg-dark-200 rounded-2xl p-8 border border-neon-green/10">
                 <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
@@ -176,8 +193,10 @@ export default function Contact() {
                 </div>
               </div>
             </div>
+          </ScrollAnimation>
 
-            {/* Contact Form */}
+          {/* Contact Form */}
+          <ScrollAnimation delay={0.2}>
             <div className="bg-dark-200 rounded-2xl p-8 border border-neon-green/10">
               <h2 className="text-2xl font-bold mb-6">Send a Message</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -260,7 +279,7 @@ export default function Contact() {
                 </button>
               </form>
             </div>
-          </div>
+          </ScrollAnimation>
         </div>
       </div>
     </Layout>

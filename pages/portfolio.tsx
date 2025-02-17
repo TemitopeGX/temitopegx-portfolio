@@ -9,6 +9,12 @@ import {
   faExternalLink,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPinterest,
+  faBehance,
+  faDribbble,
+  faGithub,
+} from "@fortawesome/free-brands-svg-icons";
 
 interface Project {
   _id: string;
@@ -54,6 +60,33 @@ export default function Portfolio() {
 
   const featuredProjects = projects.filter((p) => p.featured);
   const otherProjects = projects.filter((p) => !p.featured);
+
+  const socialLinks = [
+    {
+      name: "Pinterest",
+      icon: faPinterest,
+      url: "https://www.pinterest.com/temitopeayomikun999/",
+      color: "hover:text-[#E60023]",
+    },
+    {
+      name: "Dribbble",
+      icon: faDribbble,
+      url: "https://dribbble.com/Temitope112211",
+      color: "hover:text-[#EA4C89]",
+    },
+    {
+      name: "Behance",
+      icon: faBehance,
+      url: "https://behance.net/temitopegx",
+      color: "hover:text-[#1769FF]",
+    },
+    {
+      name: "GitHub",
+      icon: faGithub,
+      url: "https://github.com/TemitopeGX",
+      color: "hover:text-[#6e5494]",
+    },
+  ];
 
   return (
     <Layout>
@@ -253,6 +286,27 @@ export default function Portfolio() {
             </a>
           </div>
         </section>
+
+        <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold mb-6">
+              Find Me On <span className="text-neon-green">Social Media</span>
+            </h2>
+            <div className="flex justify-center gap-6">
+              {socialLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-14 h-14 bg-dark-300 rounded-xl flex items-center justify-center text-gray-400 ${link.color} transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-neon-green/20`}
+                >
+                  <FontAwesomeIcon icon={link.icon} className="text-2xl" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
       </main>
     </Layout>
   );

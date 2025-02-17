@@ -19,6 +19,7 @@
     "date-fns": "^4.1.0",
     "firebase": "^10.8.0",
     "formidable": "^3.5.2",
+    "framer-motion": "^12.4.3",
     "mongodb": "^6.12.0",
     "next": "^15.0.4",
     "nodemailer": "^6.9.16",
