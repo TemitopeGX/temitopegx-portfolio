@@ -212,6 +212,14 @@ function AdminDashboard() {
     return () => clearInterval(interval);
   }, []);
 
+  // Helper function to safely format dates
+  const formatDate = (date: Value, formatString: string) => {
+    if (date instanceof Date) {
+      return format(date, formatString);
+    }
+    return format(new Date(), formatString);
+  };
+
   if (error) {
     return (
       <Layout>
@@ -410,10 +418,10 @@ function AdminDashboard() {
               />
               <div>
                 <h3 className="text-lg font-bold mb-4">
-                  Events for {format(selectedDate, "MMMM d, yyyy")}
+                  Events for {formatDate(selectedDate, "MMMM d, yyyy")}
                 </h3>
                 <div className="space-y-2">
-                  {events[format(selectedDate, "yyyy-MM-dd")]?.map(
+                  {events[formatDate(selectedDate, "yyyy-MM-dd")]?.map(
                     (event, index) => (
                       <div
                         key={index}
