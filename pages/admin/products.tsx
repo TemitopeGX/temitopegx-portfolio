@@ -124,7 +124,7 @@ function AdminProducts() {
       description: product.description,
       features: product.details?.features || [],
       specifications: product.details?.specifications || {},
-      purchaseOption: product.purchaseOption,
+      purchaseOption: product.purchaseOption || "SELAR_ONLY",
       selarLink: product.selarLink || "",
       gumroadLink: product.gumroadLink || "",
       image: product.image || "",
