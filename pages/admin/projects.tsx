@@ -27,8 +27,20 @@ interface Project {
   featured: boolean;
 }
 
+interface ProjectFormData {
+  title: string;
+  category: string;
+  description: string;
+  challenge: string;
+  solution: string;
+  image: string;
+  tags: string;
+  link: string;
+  featured: boolean;
+}
+
 const ProjectsAdmin = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ProjectFormData>({
     title: "",
     category: "",
     description: "",
@@ -174,23 +186,32 @@ const ProjectsAdmin = () => {
     });
   };
 
-  const handleImageUpload = async (file: File) => {
-    setIsUploading(true);
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File is too large. Please choose an image under 5MB.");
+      return;
+    }
+
     try {
-      const formData = new FormData();
-      formData.append("image", file);
+      setIsUploading(true);
+      const formDataForUpload = new FormData();
+      formDataForUpload.append("image", file);
 
       const response = await fetch("/api/upload", {
         method: "POST",
-        body: formData,
+        body: formDataForUpload,
       });
 
-      if (!response.ok) {
-        throw new Error("Upload failed");
-      }
+      if (!response.ok) throw new Error("Upload failed");
 
       const data = await response.json();
-      setFormData({ ...formData, image: data.url });
+      setFormData((prev) => ({
+        ...prev,
+        image: data.url,
+      }));
       toast.success("Image uploaded successfully");
     } catch (error) {
       toast.error("Failed to upload image");
@@ -198,7 +219,7 @@ const ProjectsAdmin = () => {
     } finally {
       setIsUploading(false);
     }
-  };
+  }
 
   return (
     <Layout>
@@ -332,12 +353,7 @@ const ProjectsAdmin = () => {
                         type="file"
                         ref={fileInputRef}
                         accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            handleImageUpload(file);
-                          }
-                        }}
+                        onChange={handleImageUpload}
                         className="hidden"
                       />
                       <div className="flex gap-4 items-center">
