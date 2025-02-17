@@ -18,6 +18,7 @@ import { ResponsivePie } from "@nivo/pie";
 import Calendar from "react-calendar";
 import { format } from "date-fns";
 import "react-calendar/dist/Calendar.css";
+import type { Value } from "react-calendar/dist/cjs/shared/types";
 
 interface DashboardStats {
   totalProjects: number;
@@ -109,7 +110,7 @@ function AdminDashboard() {
     },
   ];
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Value>(new Date());
   const [visitorData, setVisitorData] = useState<VisitorData[]>([]);
   const [projectDistribution, setProjectDistribution] = useState<
     ProjectDistribution[]
