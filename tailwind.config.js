@@ -7,6 +7,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        dark: {
+          DEFAULT: "#000000",
+          100: "#0A0A0A",
+          200: "#151515",
+          300: "#202020",
+        },
+        neon: {
+          green: "#39FF14",
+          blue: "#00F6FF",
+          purple: "#FF00FF",
+        },
+        accent: {
+          green: "#39FF14",
+          DEFAULT: "#39FF14",
+        },
         primary: {
           50: "#f0f9ff",
           100: "#e0f2fe",
@@ -44,6 +59,9 @@ module.exports = {
           dark: "#1F2937",
         },
       },
+      fontFamily: {
+        sans: ["Space Grotesk", "sans-serif"],
+      },
       animation: {
         gradient: "gradient 8s linear infinite",
         "float-slow": "float 6s ease-in-out infinite",
@@ -55,6 +73,8 @@ module.exports = {
         "fade-in": "fadeIn 0.5s ease-out",
         "slide-up": "slideUp 0.5s ease-out",
         "slide-down": "slideDown 0.5s ease-out",
+        "slide-left": "slideLeft 0.5s ease-out",
+        "slide-right": "slideRight 0.5s ease-out",
       },
       keyframes: {
         gradient: {
@@ -103,6 +123,18 @@ module.exports = {
             opacity: "1",
           },
         },
+        slideLeft: {
+          "0%": { transform: "translateX(100%)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
+        slideRight: {
+          "0%": { transform: "translateX(-100%)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
+      },
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic": "conic-gradient(var(--tw-gradient-stops))",
       },
     },
   },

@@ -1,0 +1,14 @@
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  category    String
+  description String
+  challenge   String?
+  solution    String?
+  image       String
+  tags        String[]
+  link        String?
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+} 

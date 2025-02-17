@@ -27,6 +27,7 @@ interface Service {
   deliverables?: string[];
   process?: string[];
   benefits?: string[];
+  color: string;
 }
 
 const services: Service[] = [
@@ -63,6 +64,7 @@ const services: Service[] = [
       "Maintain Consistency",
       "Professional Appearance",
     ],
+    color: "from-neon-purple/20 to-neon-purple/5",
   },
   {
     id: 2,
@@ -98,6 +100,7 @@ const services: Service[] = [
       "Improved Performance",
       "Scalable Solutions",
     ],
+    color: "from-neon-blue/20 to-neon-blue/5",
   },
   {
     id: 3,
@@ -132,6 +135,7 @@ const services: Service[] = [
       "Reduced Development Time",
       "Consistent User Experience",
     ],
+    color: "from-neon-green/20 to-neon-green/5",
   },
   {
     id: 4,
@@ -167,6 +171,7 @@ const services: Service[] = [
       "Code Maintainability",
       "Modern User Experience",
     ],
+    color: "from-neon-purple/20 to-neon-purple/5",
   },
   {
     id: 5,
@@ -201,6 +206,7 @@ const services: Service[] = [
       "Data-Driven Decisions",
       "Targeted Reach",
     ],
+    color: "from-neon-blue/20 to-neon-blue/5",
   },
   {
     id: 6,
@@ -235,6 +241,7 @@ const services: Service[] = [
       "Lead Generation",
       "Measurable Results",
     ],
+    color: "from-neon-green/20 to-neon-green/5",
   },
 ];
 
@@ -261,340 +268,82 @@ export default function ServicesPage() {
         />
       </Head>
 
-      <main className="min-h-screen">
+      <main className="bg-dark min-h-screen">
         {/* Hero Section */}
-        <section className="minimalist-section relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="dot-pattern opacity-30" />
-            <div className="grid-pattern opacity-20" />
-          </div>
-          <div className="particle-effect" />
-          <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-[#2B3FF3]/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 left-0 w-[500px] h-[500px] bg-[#6F3FF3]/10 rounded-full blur-3xl animate-pulse" />
+        <section className="pt-32 pb-20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-20" />
+          <div className="diagonal-stripe absolute top-1/2 -translate-y-1/2 w-full h-32 opacity-10" />
 
-          <div className="minimalist-container relative">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 text-gradient-animate">
-                Transform Your Vision Into Reality
-              </h1>
-              <p className="text-xl md:text-2xl text-gray-600 mb-12">
-                We offer comprehensive design and development solutions to help
-                your business thrive in the digital world
-              </p>
-              <div className="flex justify-center space-x-4">
-                <Link href="/contact" className="minimalist-button">
-                  Start Your Project
-                </Link>
-                <a href="#services" className="minimalist-button-outline">
-                  Explore Services
-                </a>
-              </div>
-            </div>
+          <div className="max-w-7xl mx-auto px-4 relative z-10">
+            <h1 className="text-5xl md:text-7xl font-bold text-center mb-6">
+              Our <span className="text-neon-green">Services</span>
+            </h1>
+            <p className="text-gray-400 text-center text-lg md:text-xl max-w-3xl mx-auto">
+              Transforming ideas into exceptional digital experiences through
+              innovative design and development solutions
+            </p>
           </div>
         </section>
 
         {/* Services Grid */}
-        <section id="services" className="py-12 sm:py-24 px-4">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-4xl font-bold mb-6 text-gradient-animate">
-                Our Services
-              </h2>
-              <p className="text-xl text-gray-600">
-                Transforming ideas into exceptional digital experiences through
-                innovative design and development
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.map((service) => {
-                const isExpanded = expandedCards.includes(service.id);
-                return (
+        <section className="py-20 bg-dark-200">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {services.map((service, index) => (
+                <div
+                  key={service.title}
+                  className="bg-dark p-8 rounded-xl border border-neon-green/10 hover:border-neon-green/30 transition-all duration-300 group"
+                >
+                  {/* Icon */}
                   <div
-                    key={service.id}
-                    className="bg-white rounded-xl shadow-lg p-6"
+                    className={`w-16 h-16 mb-6 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center`}
                   >
-                    {/* Service Icon */}
-                    <div className="mb-6">
-                      <div className="w-16 h-16 bg-gradient-to-br from-[#2B3FF3] to-[#6F3FF3] rounded-xl flex items-center justify-center">
-                        <FontAwesomeIcon
-                          icon={service.icon}
-                          className="text-2xl text-white"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Service Title & Description */}
-                    <h3 className="text-xl font-bold mb-4">{service.title}</h3>
-                    <p className="text-gray-600 mb-6">{service.description}</p>
-
-                    {/* Features Preview */}
-                    <div className="space-y-3 mb-6">
-                      <h4 className="font-medium text-gray-700 mb-2">
-                        Features
-                      </h4>
-                      {service.features
-                        .slice(0, isExpanded ? undefined : 3)
-                        .map((feature) => (
-                          <div
-                            key={feature}
-                            className="flex items-center space-x-2 text-gray-600"
-                          >
-                            <div className="w-1.5 h-1.5 rounded-full bg-[#2B3FF3]" />
-                            <span>{feature}</span>
-                          </div>
-                        ))}
-                    </div>
-
-                    {/* Expandable Content */}
-                    {isExpanded && (
-                      <>
-                        {/* Technologies or Deliverables */}
-                        {(service.technologies || service.deliverables) && (
-                          <div className="pt-4 border-t border-gray-100">
-                            <h4 className="text-sm font-medium text-gray-700 mb-2">
-                              {service.technologies
-                                ? "Technologies"
-                                : "Deliverables"}
-                            </h4>
-                            <div className="flex flex-wrap gap-2">
-                              {(
-                                service.technologies || service.deliverables
-                              )?.map((item) => (
-                                <span
-                                  key={item}
-                                  className="text-xs px-3 py-1 rounded-full bg-[#2B3FF3]/10 text-[#2B3FF3]"
-                                >
-                                  {item}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Process */}
-                        {service.process && (
-                          <div className="mt-6 pt-4 border-t border-gray-100">
-                            <h4 className="font-medium text-gray-700 mb-2">
-                              Our Process
-                            </h4>
-                            <div className="space-y-3">
-                              {service.process.map((step, index) => (
-                                <div
-                                  key={step}
-                                  className="flex items-center space-x-3"
-                                >
-                                  <span className="w-6 h-6 rounded-full bg-[#2B3FF3] text-white flex items-center justify-center text-sm">
-                                    {index + 1}
-                                  </span>
-                                  <span className="text-gray-600">{step}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Benefits */}
-                        {service.benefits && (
-                          <div className="mt-6 pt-4 border-t border-gray-100">
-                            <h4 className="font-medium text-gray-700 mb-2">
-                              Key Benefits
-                            </h4>
-                            <div className="space-y-3">
-                              {service.benefits.map((benefit) => (
-                                <div
-                                  key={benefit}
-                                  className="flex items-center space-x-2"
-                                >
-                                  <div className="w-1.5 h-1.5 rounded-full bg-[#2B3FF3]" />
-                                  <span className="text-gray-600">
-                                    {benefit}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    )}
-
-                    <div className="mt-6 pt-4 border-t border-gray-100 space-y-4">
-                      <button
-                        onClick={() => toggleCard(service.id)}
-                        className="block w-full text-[#2B3FF3] text-center py-2 rounded-xl border border-[#2B3FF3] hover:bg-[#2B3FF3]/5 transition-colors"
-                      >
-                        {isExpanded ? "Show Less" : "Show More"}
-                      </button>
-                      <Link
-                        href="/contact"
-                        className="block w-full bg-[#2B3FF3] text-white text-center py-3 rounded-xl hover:bg-[#2B3FF3]/90 transition-colors"
-                      >
-                        Get Started
-                      </Link>
-                    </div>
+                    <FontAwesomeIcon
+                      icon={service.icon}
+                      className="text-2xl text-white"
+                    />
                   </div>
-                );
-              })}
+
+                  {/* Content */}
+                  <h3 className="text-2xl font-bold text-white mb-4">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-400 mb-6">{service.description}</p>
+
+                  {/* Features */}
+                  <ul className="space-y-3">
+                    {service.features.map((feature) => (
+                      <li
+                        key={feature}
+                        className="flex items-center text-gray-300"
+                      >
+                        <span className="w-1.5 h-1.5 bg-neon-green rounded-full mr-2" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Service Details Modal - Only shown on larger screens */}
-        {selectedService && window.innerWidth > 640 && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-white rounded-2xl w-full max-w-4xl my-8">
-              <div className="p-6 sm:p-8">
-                <div className="flex justify-between items-start mb-8">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#2B3FF3] to-[#6F3FF3] rounded-xl flex items-center justify-center">
-                      <FontAwesomeIcon
-                        icon={selectedService.icon}
-                        className="text-xl text-white"
-                      />
-                    </div>
-                    <h2 className="text-2xl font-bold text-gradient-animate">
-                      {selectedService.title}
-                    </h2>
-                  </div>
-                  <button
-                    onClick={() => setSelectedService(null)}
-                    className="text-gray-500 hover:text-gray-700"
-                  >
-                    ✕
-                  </button>
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-8">
-                  <div>
-                    <h3 className="font-medium text-lg mb-4 text-gradient-animate">
-                      Features
-                    </h3>
-                    <div className="space-y-3">
-                      {selectedService.features.map((feature) => (
-                        <div
-                          key={feature}
-                          className="flex items-center space-x-2"
-                          onMouseEnter={() => setHoveredFeature(feature)}
-                          onMouseLeave={() => setHoveredFeature(null)}
-                        >
-                          <div
-                            className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#2B3FF3] to-[#6F3FF3] transition-all duration-300 ${
-                              hoveredFeature === feature ? "scale-150" : ""
-                            }`}
-                          />
-                          <span
-                            className={
-                              hoveredFeature === feature
-                                ? "text-gradient-animate"
-                                : "text-gray-600"
-                            }
-                          >
-                            {feature}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {(selectedService.technologies ||
-                      selectedService.deliverables) && (
-                      <div className="mt-8">
-                        <h3 className="font-medium text-lg mb-4 text-gradient-animate">
-                          {selectedService.technologies
-                            ? "Technologies"
-                            : "Deliverables"}
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                          {(
-                            selectedService.technologies ||
-                            selectedService.deliverables
-                          )?.map((item) => (
-                            <span
-                              key={item}
-                              className="text-sm px-3 py-1 rounded-full bg-gradient-to-r from-[#2B3FF3]/10 to-[#6F3FF3]/10 text-[#2B3FF3]"
-                            >
-                              {item}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div>
-                    {selectedService.process && (
-                      <div className="mb-8">
-                        <h3 className="font-medium text-lg mb-4 text-gradient-animate">
-                          Our Process
-                        </h3>
-                        <div className="space-y-3">
-                          {selectedService.process.map((step, index) => (
-                            <div
-                              key={step}
-                              className="flex items-center space-x-3"
-                            >
-                              <span className="w-6 h-6 rounded-full bg-gradient-to-r from-[#2B3FF3] to-[#6F3FF3] text-white flex items-center justify-center text-sm">
-                                {index + 1}
-                              </span>
-                              <span className="text-gray-600">{step}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {selectedService.benefits && (
-                      <div>
-                        <h3 className="font-medium text-lg mb-4 text-gradient-animate">
-                          Key Benefits
-                        </h3>
-                        <div className="space-y-3">
-                          {selectedService.benefits.map((benefit) => (
-                            <div
-                              key={benefit}
-                              className="flex items-center space-x-2"
-                            >
-                              <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#2B3FF3] to-[#6F3FF3]" />
-                              <span className="text-gray-600">{benefit}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="mt-8 pt-8 border-t border-gray-100 text-center">
-                  <Link
-                    href="/contact"
-                    className="minimalist-button inline-flex items-center"
-                  >
-                    Get Started
-                    <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Call to Action */}
-        <section className="minimalist-section relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="dot-pattern opacity-30" />
-            <div className="grid-pattern opacity-20" />
-          </div>
-          <div className="minimalist-container relative">
-            <div className="text-center max-w-3xl mx-auto">
-              <h2 className="text-4xl font-bold mb-6 text-gradient-animate">
-                Ready to Start Your Project?
-              </h2>
-              <p className="text-xl text-gray-600 mb-8">
-                Let's work together to create something extraordinary
-              </p>
-              <Link href="/contact" className="minimalist-button">
-                Contact Us
-              </Link>
-            </div>
+        {/* CTA Section */}
+        <section className="py-20 bg-dark relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Ready to Start Your Project?
+            </h2>
+            <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
+              Let's work together to create something extraordinary
+            </p>
+            <Link
+              href="/contact"
+              className="neon-button inline-flex items-center gap-2 text-lg"
+            >
+              Get in Touch
+              <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+            </Link>
           </div>
         </section>
       </main>

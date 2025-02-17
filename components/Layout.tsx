@@ -30,7 +30,7 @@ export default function Layout({ children }: LayoutProps) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-dark">
       <FontAwesomeSetup />
       <CustomCursor />
       <Navbar />

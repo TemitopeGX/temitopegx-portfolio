@@ -4,6 +4,16 @@ import Image from "next/image";
 import { truncateText } from "@/utils/textUtils";
 import { withAuth } from "@/components/withAuth";
 import { useAuth } from "@/context/AuthContext";
+import AdminNav from "@/components/AdminNav";
+import Layout from "@/components/Layout";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCloudUploadAlt,
+  faSpinner,
+  faTrash,
+  faEdit,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 
 type PurchaseOption = "SELAR_ONLY" | "SELAR_GUMROAD" | "ALL_OPTIONS";
 
@@ -256,362 +266,238 @@ function AdminProducts() {
   if (loading) return <div className="p-4">Loading...</div>;
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-8 neo-brutalism-pink inline-block p-4">
-        {editingProduct ? "Edit Product" : "Manage Products"}
-      </h1>
-
-      {/* Add Product Form */}
-      <div className="neo-brutalism-white p-6 mb-8">
-        <h2 className="text-2xl font-bold mb-6 neo-brutalism-blue inline-block p-2 text-white">
-          {editingProduct ? "Edit Product" : "Add New Product"}
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Basic Info */}
-          <div>
-            <label htmlFor="name" className="block text-lg font-bold mb-2">
-              Product Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full p-3 neo-brutalism-shadow border-2 border-black focus:outline-none"
-              required
-            />
+    <Layout>
+      <AdminNav />
+      <div className="min-h-screen bg-dark">
+        <div className="max-w-7xl mx-auto p-6">
+          {/* Header Section */}
+          <div className="bg-dark-200 rounded-xl p-8 mb-8 border border-neon-green/10">
+            <h1 className="text-4xl font-bold mb-4">
+              Manage <span className="text-neon-green">Products</span>
+            </h1>
+            <p className="text-gray-400">
+              Add, edit, or remove store products.
+            </p>
           </div>
 
-          <div>
-            <label htmlFor="price" className="block text-lg font-bold mb-2">
-              Price
-            </label>
-            <input
-              type="number"
-              id="price"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              step="0.01"
-              min="0"
-              className="w-full p-3 neo-brutalism-shadow border-2 border-black focus:outline-none"
-              required
-            />
-          </div>
+          {/* Add/Edit Product Form */}
+          <div className="bg-dark-200 rounded-xl p-6 mb-8 border border-neon-green/10">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <FontAwesomeIcon
+                icon={editingProduct ? faEdit : faPlus}
+                className="text-neon-green"
+              />
+              {editingProduct ? "Edit Product" : "Add New Product"}
+            </h2>
 
-          <div>
-            <label
-              htmlFor="description"
-              className="block text-lg font-bold mb-2"
-            >
-              Description
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              rows={3}
-              className="w-full p-3 neo-brutalism-shadow border-2 border-black focus:outline-none"
-              required
-            />
-          </div>
-
-          {/* Features */}
-          <div>
-            <h3 className="text-lg font-bold mb-2">Features</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {DEFAULT_FEATURES.map((feature) => (
-                <label
-                  key={feature}
-                  className="flex items-center space-x-2 neo-brutalism-shadow border-2 border-black p-2"
-                >
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Basic Info */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-gray-300 mb-2">
+                    Product Name
+                  </label>
                   <input
-                    type="checkbox"
-                    checked={formData.features.includes(feature)}
-                    onChange={() => handleFeatureToggle(feature)}
-                    className="form-checkbox h-5 w-5"
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full bg-dark-300 border border-neon-green/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neon-green/30 transition-colors"
+                    required
                   />
-                  <span>{feature}</span>
+                </div>
+
+                <div>
+                  <label className="block text-gray-300 mb-2">Price (₦)</label>
+                  <input
+                    type="number"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleChange}
+                    className="w-full bg-dark-300 border border-neon-green/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neon-green/30 transition-colors"
+                    placeholder="e.g., 3000"
+                    required
+                  />
+                  <p className="text-sm text-gray-400 mt-1">
+                    Enter the price in Naira (₦)
+                  </p>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="block text-gray-300 mb-2">Description</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full bg-dark-300 border border-neon-green/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neon-green/30 transition-colors"
+                  required
+                />
+              </div>
+
+              {/* Features */}
+              <div>
+                <label className="block text-gray-300 mb-2">Features</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {DEFAULT_FEATURES.map((feature) => (
+                    <div
+                      key={feature}
+                      className="flex items-center space-x-2 bg-dark-300 p-3 rounded-xl border border-neon-green/10 cursor-pointer hover:border-neon-green/30 transition-colors"
+                      onClick={() => handleFeatureToggle(feature)}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={formData.features.includes(feature)}
+                        onChange={() => handleFeatureToggle(feature)}
+                        className="form-checkbox h-5 w-5 text-neon-green rounded border-neon-green/30"
+                      />
+                      <span className="text-gray-300">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Image Upload */}
+              <div>
+                <label className="block text-gray-300 mb-2">
+                  Product Image
                 </label>
+                <div className="mt-2">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageUpload}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                  {formData.image ? (
+                    <div className="relative w-48 h-48">
+                      <Image
+                        src={formData.image}
+                        alt="Product preview"
+                        fill
+                        className="object-cover rounded-xl"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, image: "" })}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-48 h-48 border-2 border-dashed border-neon-green/30 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:border-neon-green/50 hover:text-neon-green transition-colors"
+                    >
+                      <FontAwesomeIcon
+                        icon={faCloudUploadAlt}
+                        className="text-3xl mb-2"
+                      />
+                      <span>Upload Image</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Submit Buttons */}
+              <div className="flex gap-4">
+                <button
+                  type="submit"
+                  disabled={uploading}
+                  className="bg-neon-green text-dark font-semibold px-6 py-3 rounded-xl hover:bg-neon-green/90 transition-colors flex items-center gap-2"
+                >
+                  {uploading && (
+                    <FontAwesomeIcon
+                      icon={faSpinner}
+                      className="animate-spin"
+                    />
+                  )}
+                  {editingProduct ? "Update Product" : "Add Product"}
+                </button>
+                {editingProduct && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingProduct(null);
+                      setFormData({
+                        name: "",
+                        price: "",
+                        description: "",
+                        features: [],
+                        specifications: {},
+                        purchaseOption: "ALL_OPTIONS",
+                        selarLink: "",
+                        gumroadLink: "",
+                        image: "",
+                      });
+                    }}
+                    className="bg-red-500 text-white font-semibold px-6 py-3 rounded-xl hover:bg-red-600 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+
+          {/* Products List */}
+          <div className="bg-dark-200 rounded-xl p-6 border border-neon-green/10">
+            <h2 className="text-2xl font-bold mb-6">Current Products</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product) => (
+                <div
+                  key={product._id}
+                  className="bg-dark-300 rounded-xl overflow-hidden border border-neon-green/10 hover:border-neon-green/30 transition-all duration-300"
+                >
+                  {product.image && (
+                    <div className="relative aspect-square">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <h3 className="font-bold text-xl mb-2 text-white">
+                      {product.name}
+                    </h3>
+                    <p className="text-2xl font-bold text-neon-green mb-2">
+                      ₦{(product.price * 1000).toLocaleString()}
+                    </p>
+                    <p className="text-gray-400 mb-4">
+                      {truncateText(product.description, 100)}
+                    </p>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEdit(product)}
+                        className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                      >
+                        <FontAwesomeIcon icon={faEdit} className="mr-2" />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(product._id)}
+                        className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+                      >
+                        <FontAwesomeIcon icon={faTrash} className="mr-2" />
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
-
-          {/* Specifications */}
-          <div>
-            <h3 className="text-lg font-bold mb-2">Specifications</h3>
-            <div className="space-y-4">
-              {Object.entries(DEFAULT_SPECIFICATIONS).map(
-                ([key, defaultValue]) => (
-                  <div key={key}>
-                    <label className="block text-sm font-medium mb-1">
-                      {key}
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.specifications[key] || defaultValue}
-                      onChange={(e) =>
-                        handleSpecificationChange(key, e.target.value)
-                      }
-                      className="w-full p-2 neo-brutalism-shadow border-2 border-black focus:outline-none"
-                    />
-                  </div>
-                )
-              )}
-            </div>
-          </div>
-
-          {/* Purchase Options */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-bold mb-2">Purchase Options</h3>
-
-            <div className="space-y-4">
-              <label className="flex items-center space-x-2 neo-brutalism-shadow border-2 border-black p-2">
-                <input
-                  type="radio"
-                  name="purchaseOption"
-                  checked={formData.purchaseOption === "SELAR_ONLY"}
-                  onChange={() =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      purchaseOption: "SELAR_ONLY",
-                    }))
-                  }
-                  className="form-radio h-5 w-5"
-                />
-                <span>Made Available on Selar Only</span>
-              </label>
-
-              <label className="flex items-center space-x-2 neo-brutalism-shadow border-2 border-black p-2">
-                <input
-                  type="radio"
-                  name="purchaseOption"
-                  checked={formData.purchaseOption === "SELAR_GUMROAD"}
-                  onChange={() =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      purchaseOption: "SELAR_GUMROAD",
-                    }))
-                  }
-                  className="form-radio h-5 w-5"
-                />
-                <span>Made Available on Selar and Gumroad</span>
-              </label>
-
-              <label className="flex items-center space-x-2 neo-brutalism-shadow border-2 border-black p-2">
-                <input
-                  type="radio"
-                  name="purchaseOption"
-                  checked={formData.purchaseOption === "ALL_OPTIONS"}
-                  onChange={() =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      purchaseOption: "ALL_OPTIONS",
-                    }))
-                  }
-                  className="form-radio h-5 w-5"
-                />
-                <span>Made Available on Selar, Gumroad and Cart</span>
-              </label>
-            </div>
-
-            {/* Conditional Link Fields */}
-            {(formData.purchaseOption === "SELAR_ONLY" ||
-              formData.purchaseOption === "SELAR_GUMROAD" ||
-              formData.purchaseOption === "ALL_OPTIONS") && (
-              <div className="mt-4">
-                <label className="block text-sm font-medium mb-1">
-                  Selar Link
-                </label>
-                <input
-                  type="url"
-                  name="selarLink"
-                  value={formData.selarLink}
-                  onChange={handleChange}
-                  placeholder="https://selar.co/product-link"
-                  className="w-full p-2 neo-brutalism-shadow border-2 border-black focus:outline-none"
-                  required
-                />
-              </div>
-            )}
-
-            {(formData.purchaseOption === "SELAR_GUMROAD" ||
-              formData.purchaseOption === "ALL_OPTIONS") && (
-              <div className="mt-4">
-                <label className="block text-sm font-medium mb-1">
-                  Gumroad Link
-                </label>
-                <input
-                  type="url"
-                  name="gumroadLink"
-                  value={formData.gumroadLink}
-                  onChange={handleChange}
-                  placeholder="https://gumroad.com/product-link"
-                  className="w-full p-2 neo-brutalism-shadow border-2 border-black focus:outline-none"
-                  required
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Add Image */}
-          <div>
-            <label htmlFor="image" className="block text-lg font-bold mb-2">
-              Product Image
-            </label>
-            <div className="flex items-center space-x-4">
-              <input
-                type="file"
-                id="image"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageUpload}
-                ref={fileInputRef}
-              />
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="neo-brutalism-button bg-gray-500 text-white"
-                disabled={uploading}
-              >
-                {uploading ? "Uploading..." : "Choose Image"}
-              </button>
-              {formData.image && (
-                <div className="relative w-24 h-24">
-                  <Image
-                    src={formData.image}
-                    alt="Product preview"
-                    fill
-                    className="rounded-lg object-cover"
-                  />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setFormData((prev) => ({ ...prev, image: "" }))
-                    }
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
-                  >
-                    ×
-                  </button>
-                </div>
-              )}
-            </div>
-            {!formData.image && (
-              <p className="text-sm text-gray-600 mt-1">
-                Upload a product image (recommended size: 800x800px)
-              </p>
-            )}
-          </div>
-
-          <div className="flex space-x-4">
-            <button type="submit" className="neo-brutalism-button">
-              {editingProduct ? "Update Product" : "Add Product"}
-            </button>
-            {editingProduct && (
-              <button
-                type="button"
-                onClick={() => {
-                  setEditingProduct(null);
-                  setFormData({
-                    name: "",
-                    price: "",
-                    description: "",
-                    features: [],
-                    specifications: {},
-                    purchaseOption: "ALL_OPTIONS",
-                    selarLink: "",
-                    gumroadLink: "",
-                    image: "",
-                  });
-                }}
-                className="neo-brutalism-button bg-gray-500 text-white"
-              >
-                Cancel Edit
-              </button>
-            )}
-          </div>
-        </form>
-      </div>
-
-      {/* Products List */}
-      <div className="neo-brutalism-white p-6">
-        <h2 className="text-2xl font-bold mb-6 neo-brutalism-blue inline-block p-2 text-white">
-          Current Products
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
-            <div key={product._id} className="neo-brutalism-card">
-              {product.image && (
-                <div className="relative aspect-square mb-4 overflow-hidden">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="rounded-lg object-cover"
-                  />
-                </div>
-              )}
-              <h3 className="font-bold text-xl mb-2">{product.name}</h3>
-              <p className="text-2xl font-bold text-[#2B3FF3] mb-2">
-                ₦{(product.price * 1000).toLocaleString()}
-              </p>
-              <p className="text-gray-700 mb-4">
-                {truncateText(product.description, 100)}
-              </p>
-
-              {/* Show truncated features */}
-              {product.details?.features && (
-                <div className="mb-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <h4 className="font-bold">Features:</h4>
-                    <button
-                      onClick={() => handleEdit(product)}
-                      className="text-sm text-blue-500 hover:underline"
-                    >
-                      View All
-                    </button>
-                  </div>
-                  <ul className="list-disc list-inside">
-                    {product.details.features
-                      .slice(0, 3)
-                      .map((feature, index) => (
-                        <li key={index}>{feature}</li>
-                      ))}
-                    {product.details.features.length > 3 && (
-                      <li className="text-gray-500">...</li>
-                    )}
-                  </ul>
-                </div>
-              )}
-
-              <div className="flex space-x-2 mt-4">
-                <button
-                  onClick={() => handleEdit(product)}
-                  className="neo-brutalism-button bg-blue-500 text-white"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(product._id)}
-                  className="neo-brutalism-button bg-red-500 text-white"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
-
-      <button
-        onClick={logout}
-        className="neo-brutalism-button bg-red-500 text-white fixed top-4 right-4"
-      >
-        Logout
-      </button>
-    </div>
+    </Layout>
   );
 }
 

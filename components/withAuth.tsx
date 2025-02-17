@@ -11,7 +11,7 @@ export function withAuth<P extends object>(
 
     useEffect(() => {
       if (!loading && !user) {
-        router.replace("/admin/login");
+        router.replace("/admin");
       }
     }, [user, loading, router]);
 

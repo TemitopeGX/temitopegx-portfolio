@@ -4,6 +4,13 @@ import { useCart } from "../context/CartContext";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Script from "next/script";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faShoppingCart,
+  faTrash,
+  faCreditCard,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Exchange rates (you might want to fetch these dynamically)
 type CurrencyCode = "USD" | "NGN" | "GHS" | "ZAR" | "KES";
@@ -223,47 +230,63 @@ export default function Cart() {
 
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 neo-brutalism-button bg-[#2B3FF3] text-white transition-transform duration-300"
+        className="fixed bottom-6 right-6 bg-neon-green text-dark px-6 py-3 rounded-xl font-semibold hover:bg-neon-green/90 transition-colors flex items-center gap-2 shadow-lg"
       >
-        Cart ({state.items.reduce((acc, item) => acc + item.quantity, 0)})
+        <FontAwesomeIcon icon={faShoppingCart} />
+        <span>
+          Cart ({state.items.reduce((acc, item) => acc + item.quantity, 0)})
+        </span>
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-2xl w-full mx-4 neo-brutalism-white">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-black">Your Cart</h2>
-              <button onClick={() => setIsOpen(false)} className="text-2xl">
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
+          <div className="bg-dark-200 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
+            <div className="p-6 border-b border-neon-green/10 flex justify-between items-center sticky top-0 bg-dark-200 z-10">
+              <h2 className="text-2xl font-bold text-white">Your Cart</h2>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-8 h-8 bg-dark-300 rounded-lg flex items-center justify-center text-gray-400 hover:bg-dark-400 transition-colors"
+              >
                 ×
               </button>
             </div>
 
             {state.items.length === 0 ? (
-              <p className="text-center py-8">Your cart is empty</p>
+              <div className="p-8 text-center">
+                <div className="w-16 h-16 bg-dark-300 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <FontAwesomeIcon
+                    icon={faShoppingCart}
+                    className="text-2xl text-gray-400"
+                  />
+                </div>
+                <p className="text-gray-400">Your cart is empty</p>
+              </div>
             ) : (
-              <>
+              <div className="p-6">
                 <div className="space-y-4 mb-6">
                   {state.items.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center gap-4 p-4 neo-brutalism-white"
+                      className="flex items-center gap-4 p-4 bg-dark-300 rounded-xl border border-neon-green/10"
                     >
-                      <div className="relative w-20 h-20">
+                      <div className="relative w-20 h-20 rounded-lg overflow-hidden">
                         <Image
                           src={item.image}
                           alt={item.name}
                           layout="fill"
                           objectFit="cover"
-                          className="neo-brutalism-image"
+                          className="bg-dark-400"
                         />
                       </div>
-                      <div className="flex-1">
-                        <h3 className="font-bold">{item.name}</h3>
-                        <p className="text-gray-600">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-white truncate">
+                          {item.name}
+                        </h3>
+                        <p className="text-neon-green">
                           {formatPrice(convertPrice(item.price))}
                         </p>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-3">
                         <button
                           onClick={() =>
                             dispatch({
@@ -274,11 +297,13 @@ export default function Cart() {
                               },
                             })
                           }
-                          className="neo-brutalism-button px-3 py-1"
+                          className="w-8 h-8 bg-dark-400 rounded-lg flex items-center justify-center text-white hover:bg-dark-500 transition-colors"
                         >
                           -
                         </button>
-                        <span className="w-8 text-center">{item.quantity}</span>
+                        <span className="w-8 text-center text-white">
+                          {item.quantity}
+                        </span>
                         <button
                           onClick={() =>
                             dispatch({
@@ -289,31 +314,31 @@ export default function Cart() {
                               },
                             })
                           }
-                          className="neo-brutalism-button px-3 py-1"
+                          className="w-8 h-8 bg-dark-400 rounded-lg flex items-center justify-center text-white hover:bg-dark-500 transition-colors"
                         >
                           +
                         </button>
+                        <button
+                          onClick={() =>
+                            dispatch({ type: "REMOVE_ITEM", payload: item.id })
+                          }
+                          className="w-8 h-8 bg-red-500/10 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-500/20 transition-colors ml-2"
+                        >
+                          <FontAwesomeIcon icon={faTrash} className="text-sm" />
+                        </button>
                       </div>
-                      <button
-                        onClick={() =>
-                          dispatch({ type: "REMOVE_ITEM", payload: item.id })
-                        }
-                        className="text-red-500"
-                      >
-                        Remove
-                      </button>
                     </div>
                   ))}
                 </div>
 
-                <div className="border-t-2 border-black pt-4">
-                  <div className="flex justify-between items-center mb-4">
+                <div className="bg-dark-300 rounded-xl p-6 space-y-6">
+                  <div className="flex justify-between items-center">
                     <div className="flex items-center gap-4">
-                      <span className="font-bold">Currency:</span>
+                      <span className="text-gray-400">Currency:</span>
                       <select
                         value={currency}
                         onChange={handleCurrencyChange}
-                        className="neo-brutalism-white p-2 border-2 border-black"
+                        className="bg-dark-400 text-white px-4 py-2 rounded-lg border border-neon-green/10 focus:outline-none focus:border-neon-green/30 transition-colors"
                       >
                         {Object.entries(CURRENCY_LABELS).map(
                           ([code, label]) => (
@@ -324,15 +349,17 @@ export default function Cart() {
                         )}
                       </select>
                     </div>
-                    <span className="text-2xl font-black">
-                      {formatPrice(convertPrice(state.total))}
-                    </span>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-400 mb-1">Total Amount</p>
+                      <p className="text-2xl font-bold text-neon-green">
+                        {formatPrice(convertPrice(state.total))}
+                      </p>
+                    </div>
                   </div>
 
                   {getStatusUI()}
-
                   {error && (
-                    <div className="mb-4 p-3 bg-red-100 text-red-700 neo-brutalism-white">
+                    <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-sm">
                       {error}
                     </div>
                   )}
@@ -342,21 +369,32 @@ export default function Cart() {
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full p-3 mb-4 border-2 border-black"
+                    className="w-full bg-dark-400 border border-neon-green/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/30 transition-colors"
                     required
                   />
 
                   <button
                     onClick={handleCheckout}
                     disabled={isLoading}
-                    className={`neo-brutalism-button bg-[#2B3FF3] text-white w-full ${
-                      isLoading ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className="w-full bg-neon-green text-dark font-semibold px-6 py-4 rounded-xl hover:bg-neon-green/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isLoading ? "Processing..." : "Proceed to Payment"}
+                    {isLoading ? (
+                      <>
+                        <FontAwesomeIcon
+                          icon={faSpinner}
+                          className="animate-spin"
+                        />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <FontAwesomeIcon icon={faCreditCard} />
+                        Proceed to Payment
+                      </>
+                    )}
                   </button>
                 </div>
-              </>
+              </div>
             )}
           </div>
         </div>

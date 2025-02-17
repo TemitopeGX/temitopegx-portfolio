@@ -3,8 +3,9 @@ import Head from "next/head";
 import Layout from "../components/Layout";
 import Hero from "../components/Hero";
 import Services from "../components/Services";
-import About from "../components/About";
-import Testimonials from "../components/Testimonials";
+import TechStack from "../components/TechStack";
+import WorkProcess from "../components/WorkProcess";
+import Stats from "../components/Stats";
 import Contact from "../components/Contact";
 
 export default function Home() {
@@ -21,8 +22,9 @@ export default function Home() {
       <main>
         <Hero />
         <Services />
-        <About />
-        <Testimonials />
+        <TechStack />
+        <WorkProcess />
+        <Stats />
         <Contact />
       </main>
     </Layout>

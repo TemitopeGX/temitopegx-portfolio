@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 import fs from "fs/promises";
-import sharp from "sharp";
 
 export const config = {
   api: {
@@ -14,38 +13,47 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
   try {
-    const form = formidable({});
-    const [, files] = await form.parse(req);
-    const file = files.image?.[0];
+    const form = formidable({
+      maxFiles: 1,
+      maxFileSize: 5 * 1024 * 1024, // 5MB
+    });
 
-    if (!file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
+    return new Promise((resolve, reject) => {
+      form.parse(req, async (err, fields, files) => {
+        if (err) {
+          reject(err);
+          return res.status(500).json({ error: "Upload failed" });
+        }
 
-    // Read file
-    const imageBuffer = await fs.readFile(file.filepath);
+        const file = files.image?.[0];
+        if (!file) {
+          reject(new Error("No file uploaded"));
+          return res.status(400).json({ error: "No file uploaded" });
+        }
 
-    // Compress and resize image
-    const compressedImage = await sharp(imageBuffer)
-      .resize(800, 800, { fit: "inside" })
-      .jpeg({ quality: 80 })
-      .toBuffer();
+        try {
+          // Read file and convert to base64
+          const imageBuffer = await fs.readFile(file.filepath);
+          const base64Image = imageBuffer.toString("base64");
+          const fileType = file.mimetype || "image/jpeg";
+          const imageString = `data:${fileType};base64,${base64Image}`;
 
-    // Convert to base64
-    const base64Image = compressedImage.toString("base64");
-    const fileType = "image/jpeg";
-    const imageUrl = `data:${fileType};base64,${base64Image}`;
+          // Clean up temp file
+          await fs.unlink(file.filepath);
 
-    // Clean up temp file
-    await fs.unlink(file.filepath);
-
-    res.status(200).json({ url: imageUrl });
+          resolve(res.status(200).json({ url: imageString }));
+        } catch (error) {
+          reject(error);
+          return res.status(500).json({ error: "Failed to process image" });
+        }
+      });
+    });
   } catch (error) {
     console.error("Upload error:", error);
-    res.status(500).json({ error: "Upload failed" });
+    return res.status(500).json({ error: "Upload failed" });
   }
 }

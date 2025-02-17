@@ -1,16 +1,22 @@
 "use client";
 import { useState } from "react";
 import Head from "next/head";
-import Layout from "../components/Layout";
+import Layout from "@/components/Layout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEnvelope,
   faPhone,
-  faLocationDot,
-  faClock,
-  faCheck,
+  faMapMarkerAlt,
+  faPaperPlane,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTwitter,
+  faLinkedinIn,
+  faGithub,
+  faBehance,
+} from "@fortawesome/free-brands-svg-icons";
+import toast from "react-hot-toast";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -19,40 +25,27 @@ export default function Contact() {
     subject: "",
     message: "",
   });
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [cursorVariant, setCursorVariant] = useState("default");
-
-  const handleMouseEnter = () => setCursorVariant("hover");
-  const handleMouseLeave = () => setCursorVariant("default");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("loading");
+    setIsSubmitting(true);
 
     try {
-      // Format the message for WhatsApp
-      const whatsappMessage = `*New Contact Form Message*\n\nName: ${formData.name}\nEmail: ${formData.email}\nSubject: ${formData.subject}\nMessage: ${formData.message}`;
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-      // Format the phone number (remove any spaces or special characters)
-      const phoneNumber = "+2347030513326";
+      if (!response.ok) throw new Error("Failed to send message");
 
-      // Create the WhatsApp URL
-      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-        whatsappMessage
-      )}`;
-
-      // Open WhatsApp in a new tab
-      window.open(whatsappUrl, "_blank");
-
-      setStatus("success");
+      toast.success("Message sent successfully!");
       setFormData({ name: "", email: "", subject: "", message: "" });
-      setTimeout(() => setStatus("idle"), 3000);
     } catch (error) {
-      setStatus("error");
-      setTimeout(() => setStatus("idle"), 3000);
+      toast.error("Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -69,27 +62,44 @@ export default function Contact() {
     {
       icon: faEnvelope,
       label: "Email",
-      value: "temitopeoyesiji@gmail.com",
-      href: "mailto:temitopeoyesiji@gmail.com",
+      value: "temitopeayomikun999@gmail.com",
+      link: "mailto:temitopeayomikun999@gmail.com",
     },
     {
       icon: faPhone,
       label: "Phone",
-      value: "+234 703 051 3326",
-      href: "tel:+2347030513326",
+      value: "+234 906 046 2586",
+      link: "tel:+2349060462586",
     },
     {
-      icon: faLocationDot,
+      icon: faMapMarkerAlt,
       label: "Location",
-      value: "Lagos, Nigeria",
-      href: "#",
+      value: "Osun State, Nigeria",
+      link: "https://maps.google.com/?q=Osun+State+Nigeria",
     },
   ];
 
-  const workingHours = [
-    { day: "Monday - Friday", hours: "9:00 AM - 6:00 PM" },
-    { day: "Saturday", hours: "10:00 AM - 4:00 PM" },
-    { day: "Sunday", hours: "Closed" },
+  const socialLinks = [
+    {
+      icon: faTwitter,
+      url: "https://twitter.com/temitopegx",
+      color: "hover:text-[#1DA1F2]",
+    },
+    {
+      icon: faLinkedinIn,
+      url: "https://linkedin.com/in/temitopegx",
+      color: "hover:text-[#0A66C2]",
+    },
+    {
+      icon: faGithub,
+      url: "https://github.com/temitopegx",
+      color: "hover:text-white",
+    },
+    {
+      icon: faBehance,
+      url: "https://behance.net/temitopegx",
+      color: "hover:text-[#1769FF]",
+    },
   ];
 
   return (
@@ -102,178 +112,156 @@ export default function Contact() {
         />
       </Head>
 
-      <div className="min-h-screen w-full">
-        {/* Hero Section */}
-        <section className="minimalist-section relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="dot-pattern opacity-30" />
-            <div className="grid-pattern opacity-20" />
-          </div>
-          <div className="particle-effect" />
-          <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-[#2B3FF3]/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 left-0 w-[500px] h-[500px] bg-[#6F3FF3]/10 rounded-full blur-3xl animate-pulse" />
-
-          <div className="minimalist-container relative">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 text-gradient-animate">
-                Let's Work Together
+      <div className="min-h-screen bg-dark">
+        {/* Header Section */}
+        <div className="bg-dark-200 border-b border-neon-green/10">
+          <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">
+                Get in <span className="text-neon-green">Touch</span>
               </h1>
-              <p className="text-lg md:text-2xl text-gray-600 mb-12">
-                Have a project in mind? Get in touch and let's create something
-                amazing.
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                Have a project in mind? Let's discuss how we can work together
+                to bring your ideas to life.
               </p>
             </div>
           </div>
-        </section>
+        </div>
 
-        {/* Contact Form & Info Section */}
-        <section className="minimalist-section pt-0">
-          <div className="minimalist-container">
-            <div className="grid md:grid-cols-2 gap-12">
-              {/* Contact Form */}
-              <div className="space-y-8">
-                <div className="gradient-border p-[1px] rounded-2xl">
-                  <form
-                    onSubmit={handleSubmit}
-                    className="gradient-border-content p-6 space-y-6"
-                  >
-                    <div className="space-y-4">
-                      <input
-                        type="text"
-                        name="name"
-                        placeholder="Your Name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="minimalist-input"
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      />
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="Your Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="minimalist-input"
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      />
-                      <input
-                        type="text"
-                        name="subject"
-                        placeholder="Subject"
-                        value={formData.subject}
-                        onChange={handleChange}
-                        required
-                        className="minimalist-input"
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      />
-                      <textarea
-                        name="message"
-                        placeholder="Your Message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        required
-                        rows={5}
-                        className="minimalist-input resize-none"
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={status === "loading"}
-                      className="minimalist-button w-full flex items-center justify-center"
-                      onMouseEnter={handleMouseEnter}
-                      onMouseLeave={handleMouseLeave}
+        <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-12">
+            {/* Contact Information */}
+            <div className="space-y-8">
+              <div className="bg-dark-200 rounded-2xl p-8 border border-neon-green/10">
+                <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
+                <div className="space-y-6">
+                  {contactInfo.map((info, index) => (
+                    <a
+                      key={index}
+                      href={info.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-4 p-4 bg-dark-300 rounded-xl hover:bg-dark-400 transition-colors group"
                     >
-                      {status === "loading" ? (
+                      <div className="w-12 h-12 bg-neon-green/10 rounded-lg flex items-center justify-center group-hover:bg-neon-green/20 transition-colors">
                         <FontAwesomeIcon
-                          icon={faSpinner}
-                          className="animate-spin mr-2"
+                          icon={info.icon}
+                          className="text-neon-green text-xl"
                         />
-                      ) : status === "success" ? (
-                        <FontAwesomeIcon icon={faCheck} className="mr-2" />
-                      ) : null}
-                      {status === "loading"
-                        ? "Sending..."
-                        : status === "success"
-                        ? "Message Sent!"
-                        : "Send Message"}
-                    </button>
-
-                    {status === "error" && (
-                      <p className="text-red-500 text-center">
-                        Failed to send message. Please try again.
-                      </p>
-                    )}
-                  </form>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-400">{info.label}</p>
+                        <p className="text-white font-medium">{info.value}</p>
+                      </div>
+                    </a>
+                  ))}
                 </div>
               </div>
 
-              {/* Contact Info */}
-              <div className="space-y-8">
-                {/* Contact Details */}
-                <div className="gradient-border p-[1px] rounded-2xl">
-                  <div className="gradient-border-content p-6 space-y-6">
-                    <h3 className="text-xl font-bold text-gradient-animate">
-                      Contact Information
-                    </h3>
-                    <div className="space-y-4">
-                      {contactInfo.map((info) => (
-                        <a
-                          key={info.label}
-                          href={info.href}
-                          className="flex items-center space-x-4 text-gray-600 hover:text-[#2B3FF3] transition-colors group"
-                          onMouseEnter={handleMouseEnter}
-                          onMouseLeave={handleMouseLeave}
-                        >
-                          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-[#2B3FF3]/10 to-[#6F3FF3]/10 flex items-center justify-center group-hover:from-[#2B3FF3]/20 group-hover:to-[#6F3FF3]/20 transition-colors">
-                            <FontAwesomeIcon
-                              icon={info.icon}
-                              className="h-4 w-4 text-[#2B3FF3]"
-                            />
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-500">
-                              {info.label}
-                            </p>
-                            <p className="font-medium">{info.value}</p>
-                          </div>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Working Hours */}
-                <div className="gradient-border p-[1px] rounded-2xl">
-                  <div className="gradient-border-content p-6 space-y-6">
-                    <h3 className="text-xl font-bold text-gradient-animate flex items-center">
-                      <FontAwesomeIcon icon={faClock} className="mr-2" />
-                      Working Hours
-                    </h3>
-                    <div className="space-y-4">
-                      {workingHours.map((schedule) => (
-                        <div
-                          key={schedule.day}
-                          className="flex justify-between items-center text-gray-600"
-                        >
-                          <span className="font-medium">{schedule.day}</span>
-                          <span>{schedule.hours}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+              {/* Social Links */}
+              <div className="bg-dark-200 rounded-2xl p-8 border border-neon-green/10">
+                <h2 className="text-2xl font-bold mb-6">Follow Me</h2>
+                <div className="flex gap-4">
+                  {socialLinks.map((social, index) => (
+                    <a
+                      key={index}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`w-12 h-12 bg-dark-300 rounded-lg flex items-center justify-center text-gray-400 ${social.color} transition-colors`}
+                    >
+                      <FontAwesomeIcon icon={social.icon} className="text-xl" />
+                    </a>
+                  ))}
                 </div>
               </div>
             </div>
+
+            {/* Contact Form */}
+            <div className="bg-dark-200 rounded-2xl p-8 border border-neon-green/10">
+              <h2 className="text-2xl font-bold mb-6">Send a Message</h2>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-gray-400 mb-2 text-sm">
+                      Your Name
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="w-full bg-dark-300 border border-neon-green/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neon-green/30 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 mb-2 text-sm">
+                      Your Email
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="w-full bg-dark-300 border border-neon-green/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neon-green/30 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-gray-400 mb-2 text-sm">
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-dark-300 border border-neon-green/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neon-green/30 transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-400 mb-2 text-sm">
+                    Message
+                  </label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows={6}
+                    className="w-full bg-dark-300 border border-neon-green/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neon-green/30 transition-colors resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-neon-green text-dark font-semibold px-6 py-4 rounded-xl hover:bg-neon-green/90 transition-colors flex items-center justify-center gap-2"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <FontAwesomeIcon
+                        icon={faSpinner}
+                        className="animate-spin"
+                      />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <FontAwesomeIcon icon={faPaperPlane} />
+                      Send Message
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
           </div>
-        </section>
+        </div>
       </div>
     </Layout>
   );

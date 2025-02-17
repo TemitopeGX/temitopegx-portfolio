@@ -9,52 +9,33 @@ const stats = [
 
 export default function About() {
   return (
-    <section className="minimalist-section">
-      <div className="minimalist-container">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          {/* Image */}
-          <div className="relative h-[600px] fade-in">
-            <div className="absolute inset-0 bg-gray-50 -z-10 rounded-2xl transform rotate-2"></div>
-            <div className="absolute inset-0 overflow-hidden rounded-2xl">
-              <Image
-                src="/images/about-me.jpg"
-                alt="Temitope"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
+    <section className="py-20 bg-dark">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="relative h-[600px]">
+            <div className="absolute inset-0 bg-neon-green/5 rounded-lg transform rotate-2" />
+            <Image
+              src="/images/about-me.jpg"
+              alt="About Me"
+              fill
+              className="object-cover rounded-lg"
+            />
           </div>
 
-          {/* Content */}
-          <div className="space-y-8 fade-in delay-200">
-            <div>
-              <h2 className="minimalist-heading">About Me</h2>
-              <p className="minimalist-subheading">
-                Crafting digital experiences with passion and precision
-              </p>
-            </div>
+          <div className="space-y-6">
+            <h2 className="text-4xl font-bold text-neon-green">About Me</h2>
+            <p className="text-gray-400">
+              I'm a creative professional specializing in graphic design, web
+              development, and digital media.
+            </p>
 
-            <div className="space-y-4 text-gray-600">
-              <p>
-                I'm Temitope, a creative professional specializing in graphic
-                design, web development, and digital media. With a passion for
-                creating impactful digital experiences, I help businesses
-                transform their online presence.
-              </p>
-              <p>
-                My approach combines aesthetic excellence with functional
-                design, ensuring every project not only looks great but delivers
-                real results for my clients.
-              </p>
-            </div>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-2 gap-8 pt-8">
+            <div className="grid grid-cols-2 gap-6">
               {stats.map((stat) => (
-                <div key={stat.label} className="fade-in">
-                  <div className="text-3xl font-bold">{stat.number}</div>
-                  <div className="text-gray-600">{stat.label}</div>
+                <div key={stat.label}>
+                  <div className="text-3xl font-bold text-white">
+                    {stat.number}
+                  </div>
+                  <div className="text-gray-400">{stat.label}</div>
                 </div>
               ))}
             </div>

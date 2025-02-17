@@ -1,8 +1,7 @@
-"use client";
-import { useState } from "react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthContext";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSpinner,
@@ -11,15 +10,22 @@ import {
   faShieldAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import Layout from "@/components/Layout";
+import { useState } from "react";
 
-export default function AdminLogin() {
+export default function AdminPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { user, loading, login } = useAuth();
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/admin/dashboard");
+    }
+  }, [user, loading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +46,10 @@ export default function AdminLogin() {
       [e.target.name]: e.target.value,
     }));
   };
+
+  if (loading) return null;
+
+  if (user) return null;
 
   return (
     <Layout>

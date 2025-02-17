@@ -34,74 +34,113 @@ export default function Navbar() {
   const isActive = (path: string) => router.pathname === path;
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        hasScrolled
-          ? "bg-white/80 backdrop-blur-lg shadow-lg"
-          : "bg-transparent"
-      }`}
-    >
-      <nav className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+    <nav className="fixed w-full z-50 bg-dark/80 backdrop-blur-md border-b border-neon-green/20">
+      <div className="max-w-7xl mx-auto px-4 h-20">
+        <div className="flex items-center justify-between h-full">
           {/* Logo */}
-          <Link href="/" className="text-xl font-bold text-gradient-animate">
+          <Link href="/" className="text-2xl font-bold text-white">
             TemitopéGX
+            <span className="w-2 h-2 bg-neon-green inline-block ml-1 rounded-full"></span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`text-gray-600 hover:text-[#2B3FF3] transition-colors ${
-                  isActive(link.href) ? "text-[#2B3FF3]" : ""
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <div className="hidden md:flex items-center space-x-8">
+            <Link
+              href="/"
+              className="text-gray-300 hover:text-neon-green transition-colors"
+            >
+              Home
+            </Link>
+            <Link
+              href="/services"
+              className="text-gray-300 hover:text-neon-green transition-colors"
+            >
+              Services
+            </Link>
+            <Link
+              href="/portfolio"
+              className="text-gray-300 hover:text-neon-green transition-colors"
+            >
+              Portfolio
+            </Link>
+            <Link
+              href="/store"
+              className="text-gray-300 hover:text-neon-green transition-colors"
+            >
+              Store
+            </Link>
+            <Link href="/contact" className="neon-button">
+              Get in Touch
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
           <button
+            className="md:hidden text-white"
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            aria-label="Toggle menu"
           >
-            <FontAwesomeIcon
-              icon={isOpen ? faTimes : faBars}
-              className="h-6 w-6 text-gray-600"
-            />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {isOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Menu */}
         <div
-          className={`absolute top-full left-0 right-0 transition-all duration-300 ease-in-out transform md:hidden ${
-            isOpen
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 -translate-y-4 pointer-events-none"
+          className={`md:hidden absolute left-0 right-0 bg-dark-200 transition-all duration-300 ease-in-out ${
+            isOpen ? "top-20 opacity-100" : "-top-96 opacity-0"
           }`}
         >
-          <div className="bg-white/95 backdrop-blur-lg shadow-lg rounded-b-2xl mx-4 overflow-hidden">
-            <div className="px-4 pt-2 pb-4 space-y-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`block px-4 py-3 rounded-xl text-gray-600 hover:text-[#2B3FF3] hover:bg-[#2B3FF3]/5 transition-colors ${
-                    isActive(link.href) ? "text-[#2B3FF3] bg-[#2B3FF3]/5" : ""
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+          <div className="p-4 space-y-4">
+            <Link
+              href="/"
+              className="block text-gray-300 hover:text-neon-green py-2"
+            >
+              Home
+            </Link>
+            <Link
+              href="/services"
+              className="block text-gray-300 hover:text-neon-green py-2"
+            >
+              Services
+            </Link>
+            <Link
+              href="/portfolio"
+              className="block text-gray-300 hover:text-neon-green py-2"
+            >
+              Portfolio
+            </Link>
+            <Link
+              href="/store"
+              className="block text-gray-300 hover:text-neon-green py-2"
+            >
+              Store
+            </Link>
+            <Link href="/contact" className="neon-button block text-center">
+              Get in Touch
+            </Link>
           </div>
         </div>
-      </nav>
-    </header>
+      </div>
+    </nav>
   );
 }

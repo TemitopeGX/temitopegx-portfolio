@@ -23,137 +23,131 @@ const navigation = {
   social: [
     {
       name: "Twitter",
-      href: "https://twitter.com/temitopeoyesiji",
+      href: "https://twitter.com/yourusername",
       icon: faTwitter,
     },
     {
       name: "Instagram",
-      href: "https://instagram.com/temitopeoyesiji",
+      href: "https://instagram.com/yourusername",
       icon: faInstagram,
     },
     {
       name: "LinkedIn",
-      href: "https://linkedin.com/in/temitopeoyesiji",
+      href: "https://linkedin.com/in/yourusername",
       icon: faLinkedin,
     },
     {
       name: "Behance",
-      href: "https://behance.net/temitopeoyesiji",
+      href: "https://behance.net/yourusername",
       icon: faBehance,
     },
   ],
   contact: [
     {
-      name: "Email",
-      value: "temitopeoyesiji@gmail.com",
-      href: "mailto:temitopeoyesiji@gmail.com",
       icon: faEnvelope,
+      label: "Email",
+      value: "temitopeayomikun999@gmail.com",
+      href: "mailto:temitopeayomikun999@gmail.com",
     },
     {
-      name: "Phone",
-      value: "+234 703 051 3326",
-      href: "tel:+2347030513326",
       icon: faPhone,
+      label: "Phone",
+      value: "+234 906 046 2586",
+      href: "tel:+2349060462586",
     },
     {
-      name: "Location",
-      value: "Lagos, Nigeria",
-      href: "#",
       icon: faLocationDot,
+      label: "Location",
+      value: "Osun State, Nigeria",
     },
   ],
 };
 
 export default function Footer() {
   return (
-    <footer className="relative bg-white">
-      <div className="absolute inset-0">
-        <div className="dot-pattern opacity-30" />
-        <div className="grid-pattern opacity-20" />
-      </div>
-      {/* Animated background orbs */}
-      <div className="absolute top-20 right-10 w-[300px] h-[300px] bg-[#2B3FF3]/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 left-10 w-[300px] h-[300px] bg-[#6F3FF3]/20 rounded-full blur-3xl animate-pulse" />
-
-      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
+    <footer className="bg-dark border-t border-neon-green/10">
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
-          <div className="space-y-8 xl:col-span-1">
-            <Link href="/" className="text-2xl font-bold text-gradient-animate">
+          <div>
+            <Link href="/" className="text-2xl font-bold text-white">
               TemitopéGX
+              <span className="w-2 h-2 bg-neon-green inline-block ml-1 rounded-full"></span>
             </Link>
-            <p className="text-gray-600 max-w-xs">
-              Crafting digital experiences with innovative design and
-              cutting-edge technology.
+            <p className="mt-4 text-gray-400 max-w-xs">
+              Turning digital dreams into reality through innovative design and
+              development
             </p>
-            <div className="flex space-x-6">
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-white font-bold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              {navigation.main.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    className="text-gray-400 hover:text-neon-green transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h3 className="text-white font-bold mb-4">Contact Info</h3>
+            <ul className="space-y-4">
+              {navigation.contact.map((item) => (
+                <li key={item.label} className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-neon-green/10 rounded-lg flex items-center justify-center">
+                    <FontAwesomeIcon
+                      icon={item.icon}
+                      className="text-neon-green"
+                    />
+                  </div>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      className="text-gray-400 hover:text-neon-green transition-colors"
+                    >
+                      {item.value}
+                    </a>
+                  ) : (
+                    <span className="text-gray-400">{item.value}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="mt-12 pt-8 border-t border-neon-green/10">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-gray-400 text-center md:text-left">
+              © {new Date().getFullYear()} TemitopéGX. All rights reserved.
+            </p>
+            <div className="flex gap-4">
               {navigation.social.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-[#2B3FF3] transition-colors"
+                  className="w-10 h-10 bg-neon-green/10 rounded-lg flex items-center justify-center hover:bg-neon-green/20 transition-colors"
                 >
-                  <span className="sr-only">{item.name}</span>
-                  <FontAwesomeIcon icon={item.icon} className="h-6 w-6" />
+                  <FontAwesomeIcon
+                    icon={item.icon}
+                    className="text-neon-green"
+                  />
                 </a>
               ))}
             </div>
           </div>
-
-          {/* Quick Links */}
-          <div className="mt-12 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Quick Links
-                </h3>
-                <ul className="mt-4 space-y-4">
-                  {navigation.main.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-gray-600 hover:text-[#2B3FF3] transition-colors"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Contact Info */}
-              <div className="mt-12 md:mt-0">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Contact Info
-                </h3>
-                <ul className="mt-4 space-y-4">
-                  {navigation.contact.map((item) => (
-                    <li key={item.name}>
-                      <a
-                        href={item.href}
-                        className="text-gray-600 hover:text-[#2B3FF3] transition-colors flex items-center"
-                      >
-                        <FontAwesomeIcon
-                          icon={item.icon}
-                          className="h-5 w-5 mr-2"
-                        />
-                        <span>{item.value}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="mt-12 border-t border-gray-200 pt-8">
-          <p className="text-gray-500 text-center">
-            &copy; {new Date().getFullYear()} TemitopéGX. All rights reserved.
-          </p>
         </div>
       </div>
     </footer>

@@ -1,17 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import Layout from "../components/Layout";
+import Layout from "@/components/Layout";
 import Image from "next/image";
 import ProductModal from "../components/ProductModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faShoppingCart,
+  faSpinner,
+  faCheck,
   faArrowRight,
+  faTag,
+  faShieldAlt,
+  faClock,
+  faCreditCard,
 } from "@fortawesome/free-solid-svg-icons";
-import { useCart } from "../context/CartContext";
+import { useCart } from "@/context/CartContext";
 import Notification from "../components/Notification";
 import { Product } from "../types/product";
+import toast from "react-hot-toast";
 
 export default function Store() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -25,20 +32,25 @@ export default function Store() {
   });
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [cursorVariant, setCursorVariant] = useState("default");
+  const [loading, setLoading] = useState(true);
+  const [addingToCart, setAddingToCart] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  async function fetchProducts() {
+  const fetchProducts = async () => {
     try {
       const response = await fetch("/api/products");
       const data = await response.json();
       setProducts(data);
     } catch (error) {
       console.error("Error fetching products:", error);
+      toast.error("Failed to load products");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   const openProductModal = (product: Product) => {
     setSelectedProduct(product);
@@ -58,6 +70,27 @@ export default function Store() {
   const handleMouseEnter = () => setCursorVariant("hover");
   const handleMouseLeave = () => setCursorVariant("default");
 
+  const handleAddToCart = async (product: Product) => {
+    setAddingToCart(product._id);
+    try {
+      await dispatch({
+        type: "ADD_ITEM",
+        payload: {
+          id: product._id,
+          name: product.name,
+          price: product.price,
+          image: product.image || "/default-product-image.jpg",
+          quantity: 1,
+        },
+      });
+      toast.success("Added to cart!");
+    } catch (error) {
+      toast.error("Failed to add to cart");
+    } finally {
+      setAddingToCart(null);
+    }
+  };
+
   return (
     <Layout>
       <Head>
@@ -68,109 +101,158 @@ export default function Store() {
         />
       </Head>
 
-      <div className="min-h-screen w-full">
+      <div className="min-h-screen bg-dark">
         {/* Hero Section */}
-        <section className="minimalist-section relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="dot-pattern opacity-30" />
-            <div className="grid-pattern opacity-20" />
-          </div>
-          <div className="particle-effect" />
-          <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-[#2B3FF3]/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 left-0 w-[500px] h-[500px] bg-[#6F3FF3]/10 rounded-full blur-3xl animate-pulse" />
-
-          <div className="minimalist-container relative">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 text-gradient-animate">
-                Creative Digital Products
+        <div className="bg-dark-200 border-b border-neon-green/10">
+          <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">
+                Digital <span className="text-neon-green">Products</span>
               </h1>
-              <p className="text-lg md:text-2xl text-gray-600 mb-12">
-                Explore our collection of premium digital resources and tools
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                Explore our collection of premium digital products designed to
+                elevate your creative projects.
               </p>
             </div>
           </div>
-        </section>
+        </div>
 
         {/* Products Grid */}
-        <section className="minimalist-section pt-0">
-          <div className="minimalist-container">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {products.map((product, index) => (
+        <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <FontAwesomeIcon
+                icon={faSpinner}
+                className="text-neon-green text-4xl animate-spin"
+              />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {products.map((product) => (
                 <div
                   key={product._id}
-                  className="group fade-in h-full"
-                  style={{ animationDelay: `${index * 150}ms` }}
                   onClick={() => openProductModal(product)}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
+                  className="bg-dark-200 rounded-xl border border-neon-green/10 overflow-hidden hover:border-neon-green/30 transition-all duration-300 group cursor-pointer"
                 >
-                  <div className="gradient-border card-hover-effect h-full">
-                    <div className="gradient-border-content p-6 flex flex-col h-full">
-                      {/* Product Image */}
-                      <div className="relative aspect-square mb-6 overflow-hidden rounded-xl">
-                        <Image
-                          src={product.image || "/images/product1.jpg"}
-                          alt={product.name}
-                          fill
-                          className="object-contain transition-transform duration-500 group-hover:scale-110"
-                        />
-                      </div>
+                  {/* Product Image */}
+                  <div className="relative aspect-square">
+                    <Image
+                      src={product.image || "/default-product-image.jpg"}
+                      alt={product.name}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
 
-                      {/* Product Info */}
-                      <div className="flex flex-col flex-grow">
-                        <h3 className="text-xl font-bold mb-2 text-gradient-animate">
-                          {product.name}
-                        </h3>
-                        <p className="text-gray-600 mb-6 line-clamp-2 flex-grow">
-                          {product.description}
-                        </p>
+                  {/* Product Info */}
+                  <div className="p-4 space-y-3">
+                    <h3 className="text-lg font-bold text-white line-clamp-1">
+                      {product.name}
+                    </h3>
+                    <p className="text-gray-400 text-sm line-clamp-2">
+                      {product.description || "No description available"}
+                    </p>
 
-                        {/* Price & Buttons */}
-                        <div className="space-y-4">
-                          {/* Price */}
-                          <div className="flex items-center justify-between">
-                            <span className="text-2xl font-bold text-gradient-animate">
-                              ₦{product.price.toLocaleString()}
-                            </span>
-                            <button
-                              onClick={(e) => handlePurchaseNow(e, product)}
-                              className="minimalist-button-outline flex items-center"
-                              onMouseEnter={handleMouseEnter}
-                              onMouseLeave={handleMouseLeave}
+                    {/* Features */}
+                    <div className="space-y-2">
+                      {product.features && product.features.length > 0 ? (
+                        <>
+                          {product.features
+                            .slice(0, 3)
+                            .map((feature, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center text-sm text-gray-300"
+                              >
+                                <FontAwesomeIcon
+                                  icon={faCheck}
+                                  className="text-neon-green mr-2 text-xs"
+                                />
+                                {feature}
+                              </div>
+                            ))}
+                          {product.features.length > 3 && (
+                            <div
+                              className="text-sm text-neon-green cursor-pointer hover:underline"
+                              onClick={() => openProductModal(product)}
                             >
-                              <FontAwesomeIcon
-                                icon={faShoppingCart}
-                                className="mr-2 h-4 w-4"
-                              />
-                              Purchase
-                            </button>
-                          </div>
-
-                          {/* View Details Button */}
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openProductModal(product);
-                            }}
-                            className="w-full py-2 text-gray-600 hover:text-[#2B3FF3] transition-colors flex items-center justify-center group border border-gray-200 rounded-xl hover:border-[#2B3FF3]/30"
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                          >
-                            View Details
-                            <FontAwesomeIcon
-                              icon={faArrowRight}
-                              className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform"
-                            />
-                          </button>
+                              +{product.features.length - 3} more features
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <div className="text-sm text-gray-400">
+                          Features not available
                         </div>
-                      </div>
+                      )}
+                    </div>
+
+                    {/* Price and Action */}
+                    <div className="flex items-center justify-between pt-3 border-t border-neon-green/10">
+                      <p className="text-xl font-bold text-neon-green">
+                        ₦{(product.price || 0).toLocaleString()}
+                      </p>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openProductModal(product);
+                        }}
+                        className="bg-neon-green text-dark px-4 py-2 rounded-lg font-semibold hover:bg-neon-green/90 transition-colors flex items-center gap-2 text-sm"
+                      >
+                        <FontAwesomeIcon icon={faCreditCard} />
+                        Buy Now
+                      </button>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+          )}
+        </div>
+
+        {/* Features Section */}
+        <div className="bg-dark-200 border-t border-neon-green/10 py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-neon-green/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <FontAwesomeIcon
+                    icon={faShieldAlt}
+                    className="text-2xl text-neon-green"
+                  />
+                </div>
+                <h3 className="text-lg font-bold mb-2">Secure Payments</h3>
+                <p className="text-gray-400 text-sm">
+                  Your transactions are safe and secure with us
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-neon-green/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <FontAwesomeIcon
+                    icon={faClock}
+                    className="text-2xl text-neon-green"
+                  />
+                </div>
+                <h3 className="text-lg font-bold mb-2">Instant Delivery</h3>
+                <p className="text-gray-400 text-sm">
+                  Get your digital products instantly after purchase
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-neon-green/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <FontAwesomeIcon
+                    icon={faTag}
+                    className="text-2xl text-neon-green"
+                  />
+                </div>
+                <h3 className="text-lg font-bold mb-2">Best Value</h3>
+                <p className="text-gray-400 text-sm">
+                  Premium quality products at competitive prices
+                </p>
+              </div>
+            </div>
           </div>
-        </section>
+        </div>
       </div>
 
       {/* Purchase Modal */}
@@ -234,7 +316,10 @@ export default function Store() {
       <ProductModal
         product={selectedProduct}
         isOpen={isModalOpen}
-        closeModal={() => setIsModalOpen(false)}
+        closeModal={() => {
+          setIsModalOpen(false);
+          setSelectedProduct(null);
+        }}
       />
 
       <Notification
