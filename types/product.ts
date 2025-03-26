@@ -4,6 +4,7 @@ export interface Product {
   name: string;
   price: number;
   description: string;
+  category?: string;
   details?: {
     features: string[];
     specifications: { [key: string]: string };

@@ -21,6 +21,7 @@ interface FormData {
   name: string;
   price: string;
   description: string;
+  category: string;
   features: string[];
   specifications: {
     [key: string]: string;
@@ -56,6 +57,7 @@ function AdminProducts() {
     name: "",
     price: "",
     description: "",
+    category: "Digital Product",
     features: [],
     specifications: {},
     purchaseOption: "ALL_OPTIONS",
@@ -122,6 +124,7 @@ function AdminProducts() {
       name: product.name,
       price: product.price.toString(),
       description: product.description,
+      category: product.category || "Digital Product",
       features: product.details?.features || [],
       specifications: product.details?.specifications || {},
       purchaseOption: product.purchaseOption || "SELAR_ONLY",
@@ -181,6 +184,7 @@ function AdminProducts() {
         name: "",
         price: "",
         description: "",
+        category: "Digital Product",
         features: [],
         specifications: {},
         purchaseOption: "ALL_OPTIONS",
@@ -308,6 +312,18 @@ function AdminProducts() {
                 </div>
 
                 <div>
+                  <label className="block text-gray-300 mb-2">Category</label>
+                  <input
+                    type="text"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    className="w-full bg-dark-300 border border-neon-green/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neon-green/30 transition-colors"
+                    placeholder="e.g., Digital Product, Template, Plugin"
+                  />
+                </div>
+
+                <div>
                   <label className="block text-gray-300 mb-2">Price (₦)</label>
                   <input
                     type="number"
@@ -428,6 +444,7 @@ function AdminProducts() {
                         name: "",
                         price: "",
                         description: "",
+                        category: "Digital Product",
                         features: [],
                         specifications: {},
                         purchaseOption: "ALL_OPTIONS",

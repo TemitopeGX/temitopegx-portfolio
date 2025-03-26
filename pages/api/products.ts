@@ -26,6 +26,7 @@ export default async function handler(
 
           const newProduct = {
             ...req.body,
+            category: req.body.category || "Digital Product",
             createdAt: new Date(),
             updatedAt: new Date(),
           };
