@@ -146,19 +146,26 @@ export default function Cart() {
     }
   };
 
-  const handleCheckout = () => {
+  const loadPaystackScript = async () => {
+    if (!window.PaystackPop) {
+      const script = document.createElement("script");
+      script.src = "https://js.paystack.co/v1/inline.js";
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+      await new Promise((resolve) => (script.onload = resolve));
+    }
+  };
+
+  const handleCheckout = async () => {
     try {
+      await loadPaystackScript();
       setError("");
       setIsLoading(true);
       setPaymentStatus("idle");
 
       if (!email) {
         setError("Please enter your email address");
-        return;
-      }
-
-      if (!window.PaystackPop) {
-        setError("Payment system is not ready. Please try again.");
         return;
       }
 

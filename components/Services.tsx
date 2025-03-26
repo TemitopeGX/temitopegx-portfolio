@@ -6,14 +6,12 @@ import {
   faLaptopCode,
   faGlobe,
   faRocket,
-  faLightbulb,
-  faPenRuler,
-  faLayerGroup,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { motion } from "framer-motion";
 
 interface Service {
   id: number;
@@ -21,8 +19,6 @@ interface Service {
   title: string;
   description: string;
   features: string[];
-  technologies?: string[];
-  deliverables?: string[];
 }
 
 const services: Service[] = [
@@ -97,67 +93,141 @@ const services: Service[] = [
 ];
 
 export default function Services() {
-  const [activeService, setActiveService] = useState<number | null>(null);
-  const [hoveredFeature, setHoveredFeature] = useState<string | null>(null);
-
   return (
-    <section className="py-20 bg-dark-200">
-      <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-center text-4xl font-bold mb-4">
-          Our <span className="text-neon-green">Services</span>
-        </h2>
-        <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto">
-          Transforming ideas into exceptional digital experiences through
-          innovative design and development
-        </p>
-
-        {/* Services Slider */}
-        <div className="flex flex-nowrap overflow-x-auto gap-6 pb-8 scrollbar-hide">
-          {services.map((service) => (
-            <div
-              key={service.id}
-              className="flex-none w-[300px] bg-dark border border-neon-green/10 rounded-xl p-6 hover:border-neon-green/50 transition-all duration-300 group"
-            >
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-neon-green/10 rounded-xl flex items-center justify-center group-hover:bg-neon-green/20 transition-colors">
-                  <FontAwesomeIcon
-                    icon={service.icon}
-                    className="text-neon-green text-xl"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-400">{service.description}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Call to Action */}
-        <div className="mt-12 text-center">
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 text-neon-green hover:text-neon-green/80 transition-colors"
-          >
-            <span>Start a Project</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
-          </Link>
-        </div>
+    <section className="relative py-32 bg-black overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <div
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `radial-gradient(#00FF00 1px, transparent 1px)`,
+            backgroundSize: "50px 50px",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#00FF00]/5 via-transparent to-transparent" />
       </div>
 
-      {/* Add custom scrollbar styles to your globals.css */}
-      <style jsx global>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-20"
+        >
+          <div className="inline-flex items-center space-x-2 mb-6">
+            <span className="w-2 h-2 rounded-full bg-[#00FF00] animate-pulse" />
+            <span className="text-[#00FF00] font-mono text-sm">
+              Our Services
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            What We Can Do For
+            <span className="block text-[#00FF00] mt-2">Your Business</span>
+          </h2>
+          <p className="text-white/60 max-w-2xl mx-auto text-lg">
+            We transform ideas into exceptional digital experiences through
+            innovative design and development solutions.
+          </p>
+        </motion.div>
+
+        {/* New Services Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((service, index) => (
+            <motion.div
+              key={service.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+            >
+              {/* New Card Design */}
+              <div
+                className="group h-full relative bg-black border border-white/10 rounded-2xl p-1 
+                            hover:border-[#00FF00]/50 transition-all duration-500 overflow-hidden"
+              >
+                {/* Animated Border Gradient */}
+                <div
+                  className="absolute -inset-[1px] bg-gradient-to-r from-transparent via-[#00FF00]/20 to-transparent 
+                              opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"
+                />
+
+                {/* Card Inner Content */}
+                <div className="relative h-full bg-black/50 backdrop-blur-sm rounded-xl p-8">
+                  {/* Top Section with Icon and Title */}
+                  <div className="flex items-start gap-4 mb-6">
+                    {/* Icon Container */}
+                    <div className="relative shrink-0">
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <div
+                          className="absolute inset-0 bg-[#00FF00]/10 rounded-lg transform 
+                                      group-hover:translate-x-1 group-hover:translate-y-1 transition-transform duration-300"
+                        />
+                        <div
+                          className="absolute inset-0 bg-black rounded-lg transform 
+                                      group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"
+                        />
+                        <FontAwesomeIcon
+                          icon={service.icon}
+                          className="relative z-10 text-[#00FF00] text-2xl transform group-hover:scale-110 transition-all duration-300"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Title and Description */}
+                    <div>
+                      <h3 className="text-xl font-bold text-white group-hover:text-[#00FF00] transition-colors duration-300">
+                        {service.title}
+                      </h3>
+                      <p className="text-white/60 text-sm mt-1 group-hover:text-white/80 transition-colors duration-300">
+                        {service.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Features Grid */}
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    {service.features.map((feature, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-2 text-sm text-white/70 group-hover:text-white/90 
+                                 transition-colors duration-300 p-2 rounded-lg bg-white/5 
+                                 group-hover:bg-[#00FF00]/5"
+                      >
+                        <span className="w-1 h-1 rounded-full bg-[#00FF00]/50 group-hover:bg-[#00FF00]" />
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Learn More Link */}
+                  <Link
+                    href={`/services#${service.title
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")}`}
+                    className="inline-flex items-center gap-2 text-[#00FF00] text-sm 
+                             relative group/link"
+                  >
+                    <span className="relative">
+                      Explore Service
+                      <span
+                        className="absolute left-0 bottom-0 w-full h-px bg-[#00FF00]/50 
+                                     transform scale-x-0 group-hover/link:scale-x-100 
+                                     transition-transform duration-300 origin-left"
+                      />
+                    </span>
+                    <FontAwesomeIcon
+                      icon={faArrowRight}
+                      className="text-xs transform group-hover/link:translate-x-1 transition-transform duration-300"
+                    />
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

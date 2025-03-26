@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import {
@@ -6,93 +7,199 @@ import {
   faRocket,
   faCheckCircle,
   faArrowRight,
+  faComments,
+  faPencilRuler,
+  faGears,
 } from "@fortawesome/free-solid-svg-icons";
 
 const steps = [
   {
-    icon: faLightbulb,
-    title: "Discovery",
+    icon: faComments,
+    title: "Initial Discussion",
     description:
-      "Understanding your needs and project requirements through detailed consultation",
-    color: "from-neon-purple/20 to-neon-purple/5",
+      "We start with understanding your vision, goals, and requirements through detailed consultation.",
+    details: [
+      "Project scope definition",
+      "Goals identification",
+      "Timeline planning",
+    ],
+  },
+  {
+    icon: faPencilRuler,
+    title: "Planning & Design",
+    description:
+      "Creating comprehensive plans and designs that align with your objectives.",
+    details: ["Wireframe creation", "Design mockups", "Architecture planning"],
   },
   {
     icon: faCode,
     title: "Development",
     description:
-      "Crafting solutions using cutting-edge technologies and best practices",
-    color: "from-neon-blue/20 to-neon-blue/5",
+      "Building your solution using cutting-edge technologies and best practices.",
+    details: ["Clean code writing", "Regular updates", "Progress tracking"],
   },
   {
-    icon: faCheckCircle,
-    title: "Testing",
-    description: "Rigorous quality assurance to ensure perfect functionality",
-    color: "from-neon-green/20 to-neon-green/5",
+    icon: faGears,
+    title: "Testing & Review",
+    description:
+      "Thorough testing and refinement to ensure everything works perfectly.",
+    details: ["Quality assurance", "Performance testing", "Client feedback"],
   },
   {
     icon: faRocket,
-    title: "Launch",
-    description: "Seamless deployment and ongoing support for your success",
-    color: "from-[#FF00FF]/20 to-[#FF00FF]/5",
+    title: "Launch & Support",
+    description: "Seamless deployment and continued support for your success.",
+    details: [
+      "Deployment strategy",
+      "Performance monitoring",
+      "Ongoing maintenance",
+    ],
   },
 ];
 
 export default function WorkProcess() {
   return (
-    <section className="py-20 bg-dark">
-      <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-center text-4xl font-bold mb-4">
-          Work <span className="text-neon-green">Process</span>
-        </h2>
-        <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto">
-          A systematic approach to delivering exceptional results
-        </p>
+    <section className="relative py-24 bg-black overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `radial-gradient(#00FF00 0.5px, transparent 0.5px)`,
+            backgroundSize: "24px 24px",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#00FF00]/5 via-transparent to-transparent" />
+      </div>
 
-        <div className="grid md:grid-cols-4 gap-6">
-          {steps.map((step, index) => (
-            <div key={step.title} className="group relative">
-              {/* Connecting Line */}
-              {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-1/4 left-full w-full h-[2px] bg-gradient-to-r from-neon-green/50 to-transparent -translate-y-1/2 z-0" />
-              )}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-20"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="inline-block mb-4"
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-[#00FF00]/20 blur-lg rounded-full" />
+              <div className="relative bg-black border border-[#00FF00] rounded-full px-4 py-1.5">
+                <span className="text-[#00FF00] font-mono text-sm uppercase tracking-wider">
+                  Work Process
+                </span>
+              </div>
+            </div>
+          </motion.div>
 
-              {/* Card */}
-              <div className="relative bg-dark-200 rounded-xl p-6 border border-neon-green/10 hover:border-neon-green/30 transition-all duration-300">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            How We Work Together
+          </h2>
+          <p className="text-white/60 max-w-2xl mx-auto text-base">
+            A systematic approach to turning your ideas into reality
+          </p>
+        </motion.div>
+
+        {/* Process Steps */}
+        <div className="relative">
+          {/* Connecting Line */}
+          <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-[#00FF00]/30 via-[#00FF00]/50 to-[#00FF00]/30 transform -translate-y-1/2 hidden lg:block" />
+
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-4">
+            {steps.map((step, index) => (
+              <motion.div
+                key={step.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="relative group"
+              >
                 {/* Step Number */}
-                <div className="absolute -top-4 -right-4 w-8 h-8 bg-neon-green text-dark rounded-full flex items-center justify-center font-bold">
+                <div
+                  className="absolute -top-4 left-1/2 lg:left-auto lg:top-0 transform -translate-x-1/2 lg:translate-x-0 
+                               w-8 h-8 bg-[#00FF00] text-black rounded-full flex items-center justify-center font-bold 
+                               text-sm z-10 lg:mb-4 group-hover:scale-110 transition-transform duration-300"
+                >
                   {index + 1}
                 </div>
 
-                {/* Icon */}
+                {/* Card */}
                 <div
-                  className={`w-16 h-16 mb-6 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center`}
+                  className="relative bg-white/[0.03] backdrop-blur-sm rounded-lg p-6 border border-white/10 
+                               hover:border-[#00FF00]/30 transition-all duration-300 mt-6"
                 >
-                  <FontAwesomeIcon
-                    icon={step.icon}
-                    className="text-2xl text-white"
+                  {/* Icon */}
+                  <div className="relative h-12 mb-4 flex items-center justify-center">
+                    <div
+                      className="absolute inset-0 bg-[#00FF00]/5 rounded-lg filter blur-lg 
+                                  group-hover:bg-[#00FF00]/10 transition-all duration-300"
+                    />
+                    <FontAwesomeIcon
+                      icon={step.icon}
+                      className="text-2xl text-[#00FF00] group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <h3 className="text-lg font-semibold text-white mb-2 text-center">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-white/60 mb-4 text-center">
+                    {step.description}
+                  </p>
+
+                  {/* Details */}
+                  <ul className="space-y-2">
+                    {step.details.map((detail, i) => (
+                      <li
+                        key={i}
+                        className="text-xs text-white/50 flex items-center"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#00FF00]/50 mr-2" />
+                        {detail}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Hover Effect */}
+                  <div
+                    className="absolute -inset-px rounded-lg opacity-0 group-hover:opacity-100
+                                transition-all duration-300 bg-gradient-to-r from-[#00FF00]/0 
+                                via-[#00FF00]/5 to-[#00FF00]/0 blur-sm"
                   />
                 </div>
-
-                {/* Content */}
-                <h3 className="text-xl font-bold text-white mb-3">
-                  {step.title}
-                </h3>
-                <p className="text-gray-400">{step.description}</p>
-              </div>
-            </div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-        {/* Optional CTA */}
-        <div className="text-center mt-12">
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="text-center mt-16"
+        >
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 text-neon-green hover:text-neon-green/80 transition-colors"
+            className="inline-flex items-center gap-2 bg-[#00FF00]/10 text-[#00FF00] px-6 py-3 rounded-full
+                     border border-[#00FF00]/30 hover:bg-[#00FF00]/20 transition-all duration-300
+                     group"
           >
             <span>Start Your Project</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+            <FontAwesomeIcon
+              icon={faArrowRight}
+              className="text-sm transition-transform duration-300 group-hover:translate-x-1"
+            />
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -16,6 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Service {
   id: number;
@@ -27,7 +28,6 @@ interface Service {
   deliverables?: string[];
   process?: string[];
   benefits?: string[];
-  color: string;
 }
 
 const services: Service[] = [
@@ -64,7 +64,6 @@ const services: Service[] = [
       "Maintain Consistency",
       "Professional Appearance",
     ],
-    color: "from-neon-purple/20 to-neon-purple/5",
   },
   {
     id: 2,
@@ -100,7 +99,6 @@ const services: Service[] = [
       "Improved Performance",
       "Scalable Solutions",
     ],
-    color: "from-neon-blue/20 to-neon-blue/5",
   },
   {
     id: 3,
@@ -135,7 +133,6 @@ const services: Service[] = [
       "Reduced Development Time",
       "Consistent User Experience",
     ],
-    color: "from-neon-green/20 to-neon-green/5",
   },
   {
     id: 4,
@@ -171,7 +168,6 @@ const services: Service[] = [
       "Code Maintainability",
       "Modern User Experience",
     ],
-    color: "from-neon-purple/20 to-neon-purple/5",
   },
   {
     id: 5,
@@ -206,7 +202,6 @@ const services: Service[] = [
       "Data-Driven Decisions",
       "Targeted Reach",
     ],
-    color: "from-neon-blue/20 to-neon-blue/5",
   },
   {
     id: 6,
@@ -241,111 +236,214 @@ const services: Service[] = [
       "Lead Generation",
       "Measurable Results",
     ],
-    color: "from-neon-green/20 to-neon-green/5",
   },
 ];
 
 export default function ServicesPage() {
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const [hoveredFeature, setHoveredFeature] = useState<string | null>(null);
-  const [expandedCards, setExpandedCards] = useState<number[]>([]);
+  const [selectedService, setSelectedService] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<string>("features");
 
-  const toggleCard = (id: number) => {
-    setExpandedCards((prev) =>
-      prev.includes(id) ? prev.filter((cardId) => cardId !== id) : [...prev, id]
-    );
+  const toggleService = (id: number) => {
+    setSelectedService(selectedService === id ? null : id);
+    setActiveTab("features");
   };
 
   return (
     <Layout>
       <Head>
-        <title>
-          Our Services - Professional Design & Development Solutions
-        </title>
+        <title>Services - TemitopeGX</title>
         <meta
           name="description"
-          content="Explore our comprehensive range of design and development services. From brand identity to web development, we deliver exceptional digital experiences."
+          content="Professional web development, design, and digital marketing services"
         />
       </Head>
 
-      <main className="bg-dark min-h-screen">
-        {/* Hero Section */}
-        <section className="pt-32 pb-20 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-20" />
-          <div className="diagonal-stripe absolute top-1/2 -translate-y-1/2 w-full h-32 opacity-10" />
+      <main className="min-h-screen bg-black pt-32 pb-24 px-4 sm:px-6">
+        {/* Background Elements */}
+        <div className="fixed inset-0 z-0">
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: `radial-gradient(#00FF00 0.5px, transparent 0.5px)`,
+              backgroundSize: "24px 24px",
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#00FF00]/5 via-transparent to-transparent" />
+        </div>
 
-          <div className="max-w-7xl mx-auto px-4 relative z-10">
-            <h1 className="text-5xl md:text-7xl font-bold text-center mb-6">
-              Our <span className="text-neon-green">Services</span>
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="inline-block mb-4"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 bg-[#00FF00]/20 blur-lg rounded-full" />
+                <div className="relative bg-black border border-[#00FF00] rounded-full px-4 py-1.5">
+                  <span className="text-[#00FF00] font-mono text-sm uppercase tracking-wider">
+                    What I Offer
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Professional Services
             </h1>
-            <p className="text-gray-400 text-center text-lg md:text-xl max-w-3xl mx-auto">
+            <p className="text-white/60 max-w-2xl mx-auto text-lg">
               Transforming ideas into exceptional digital experiences through
-              innovative design and development solutions
+              creative design and innovative development solutions.
             </p>
-          </div>
-        </section>
+          </motion.div>
 
-        {/* Services Grid */}
-        <section className="py-20 bg-dark-200">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((service, index) => (
+          {/* Services Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((service, index) => (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group"
+              >
                 <div
-                  key={service.title}
-                  className="bg-dark p-8 rounded-xl border border-neon-green/10 hover:border-neon-green/30 transition-all duration-300 group"
+                  className={`relative bg-white/[0.03] backdrop-blur-sm rounded-xl p-6
+                             border border-white/10 hover:border-[#00FF00]/30
+                             transition-all duration-300 h-full
+                             ${
+                               selectedService === service.id
+                                 ? "border-[#00FF00]/30"
+                                 : ""
+                             }`}
                 >
-                  {/* Icon */}
-                  <div
-                    className={`w-16 h-16 mb-6 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center`}
-                  >
-                    <FontAwesomeIcon
-                      icon={service.icon}
-                      className="text-2xl text-white"
+                  {/* Service Icon */}
+                  <div className="relative h-12 w-12 mb-6">
+                    <div
+                      className="absolute inset-0 bg-[#00FF00]/5 rounded-lg blur-lg
+                                  group-hover:bg-[#00FF00]/10 transition-all duration-300"
                     />
+                    <div className="relative h-full w-full flex items-center justify-center">
+                      <FontAwesomeIcon
+                        icon={service.icon}
+                        className="text-2xl text-[#00FF00] group-hover:scale-110
+                                 transition-transform duration-300"
+                      />
+                    </div>
                   </div>
 
-                  {/* Content */}
-                  <h3 className="text-2xl font-bold text-white mb-4">
+                  {/* Service Content */}
+                  <h3 className="text-xl font-semibold text-white mb-3">
                     {service.title}
                   </h3>
-                  <p className="text-gray-400 mb-6">{service.description}</p>
+                  <p className="text-white/60 mb-6">{service.description}</p>
 
-                  {/* Features */}
-                  <ul className="space-y-3">
-                    {service.features.map((feature) => (
-                      <li
-                        key={feature}
-                        className="flex items-center text-gray-300"
+                  {/* Expand Button */}
+                  <button
+                    onClick={() => toggleService(service.id)}
+                    className="flex items-center gap-2 text-[#00FF00] hover:text-[#00FF00]/80
+                             transition-colors duration-300 text-sm font-medium"
+                  >
+                    {selectedService === service.id ? "View Less" : "View More"}
+                    <FontAwesomeIcon
+                      icon={faArrowRight}
+                      className={`transition-transform duration-300
+                                ${
+                                  selectedService === service.id
+                                    ? "rotate-180"
+                                    : ""
+                                }`}
+                    />
+                  </button>
+
+                  {/* Expanded Content */}
+                  <AnimatePresence>
+                    {selectedService === service.id && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
                       >
-                        <span className="w-1.5 h-1.5 bg-neon-green rounded-full mr-2" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+                        {/* Tabs */}
+                        <div className="flex gap-4 mt-6 mb-4 overflow-x-auto pb-2">
+                          {Object.keys(service)
+                            .filter((key) =>
+                              Array.isArray(service[key as keyof Service])
+                            )
+                            .map((tab) => (
+                              <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab)}
+                                className={`px-3 py-1 rounded-full text-sm whitespace-nowrap
+                                          transition-all duration-300
+                                          ${
+                                            activeTab === tab
+                                              ? "bg-[#00FF00] text-black font-medium"
+                                              : "text-white/60 hover:text-white"
+                                          }`}
+                              >
+                                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                              </button>
+                            ))}
+                        </div>
 
-        {/* CTA Section */}
-        <section className="py-20 bg-dark relative overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Start Your Project?
-            </h2>
-            <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-              Let's work together to create something extraordinary
-            </p>
+                        {/* Tab Content */}
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.3 }}
+                          className="space-y-2"
+                        >
+                          {service[activeTab as keyof Service]?.map(
+                            (item: string, i: number) => (
+                              <motion.div
+                                key={i}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.3, delay: i * 0.1 }}
+                                className="flex items-center gap-2 text-white/80"
+                              >
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#00FF00]" />
+                                {item}
+                              </motion.div>
+                            )
+                          )}
+                        </motion.div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* CTA Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="mt-16 text-center"
+          >
             <Link
               href="/contact"
-              className="neon-button inline-flex items-center gap-2 text-lg"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl
+                       bg-[#00FF00] text-black font-medium
+                       hover:bg-[#00FF00]/90 transition-all duration-300"
             >
-              Get in Touch
+              Start a Project
               <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
             </Link>
-          </div>
-        </section>
+          </motion.div>
+        </div>
       </main>
     </Layout>
   );

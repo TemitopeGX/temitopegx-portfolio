@@ -18,7 +18,6 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
-import ScrollAnimation from "@/components/ScrollAnimation";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -34,21 +33,12 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      // Format the message for WhatsApp
       const whatsappMessage = `*New Message from Portfolio*\n\nName: ${formData.name}\nEmail: ${formData.email}\nSubject: ${formData.subject}\n\nMessage: ${formData.message}`;
-
-      // Format the phone number (remove any spaces or special characters)
       const phoneNumber = "+2349060462586";
-
-      // Create WhatsApp URL
       const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
         whatsappMessage
       )}`;
-
-      // Open WhatsApp in new tab
       window.open(whatsappUrl, "_blank");
-
-      // Clear the form
       setFormData({ name: "", email: "", subject: "", message: "" });
       toast.success("Message sent successfully!");
     } catch (error) {
@@ -93,21 +83,25 @@ export default function Contact() {
       icon: faTwitter,
       url: "https://twitter.com/temitopegx",
       color: "hover:text-[#1DA1F2]",
+      label: "Twitter",
     },
     {
       icon: faLinkedinIn,
       url: "https://linkedin.com/in/temitopegx",
       color: "hover:text-[#0A66C2]",
+      label: "LinkedIn",
     },
     {
       icon: faGithub,
       url: "https://github.com/temitopegx",
       color: "hover:text-white",
+      label: "GitHub",
     },
     {
       icon: faBehance,
       url: "https://behance.net/temitopegx",
       color: "hover:text-[#1769FF]",
+      label: "Behance",
     },
   ];
 
@@ -121,88 +115,134 @@ export default function Contact() {
         />
       </Head>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className="min-h-screen bg-dark"
-      >
-        <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <ScrollAnimation>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Get in <span className="text-neon-green">Touch</span>
-              </h1>
-            </ScrollAnimation>
-            <ScrollAnimation delay={0.2}>
-              <p className="text-gray-400 max-w-2xl mx-auto">
-                Have a project in mind? Let's discuss how we can work together
-                to bring your ideas to life.
-              </p>
-            </ScrollAnimation>
-          </div>
+      <main className="min-h-screen bg-black pt-32 pb-24">
+        {/* Background Elements */}
+        <div className="fixed inset-0 z-0">
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: `radial-gradient(#00FF00 0.5px, transparent 0.5px)`,
+              backgroundSize: "24px 24px",
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#00FF00]/5 via-transparent to-transparent" />
         </div>
-      </motion.div>
 
-      <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-2 gap-12">
-          {/* Contact Information */}
-          <ScrollAnimation>
-            <div className="space-y-8">
-              <div className="bg-dark-200 rounded-2xl p-8 border border-neon-green/10">
-                <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="inline-block mb-4"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 bg-[#00FF00]/20 blur-lg rounded-full" />
+                <div className="relative bg-black border border-[#00FF00] rounded-full px-4 py-1.5">
+                  <span className="text-[#00FF00] font-mono text-sm uppercase tracking-wider">
+                    Contact Me
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Let's Work Together
+            </h1>
+            <p className="text-white/60 max-w-2xl mx-auto text-lg">
+              Have a project in mind? Let's discuss how we can work together to
+              bring your ideas to life.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            {/* Contact Information */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="space-y-8"
+            >
+              {/* Contact Cards */}
+              <div className="bg-white/[0.03] backdrop-blur-lg rounded-2xl p-8 border border-white/10">
+                <h2 className="text-2xl font-bold text-white mb-8">
+                  Contact Information
+                </h2>
                 <div className="space-y-6">
                   {contactInfo.map((info, index) => (
-                    <a
+                    <motion.a
                       key={index}
                       href={info.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 bg-dark-300 rounded-xl hover:bg-dark-400 transition-colors group"
+                      className="flex items-center gap-6 p-4 rounded-xl hover:bg-white/[0.02] transition-all duration-300 group"
+                      whileHover={{ x: 10 }}
                     >
-                      <div className="w-12 h-12 bg-neon-green/10 rounded-lg flex items-center justify-center group-hover:bg-neon-green/20 transition-colors">
+                      <div className="w-12 h-12 bg-[#00FF00]/10 rounded-xl flex items-center justify-center group-hover:bg-[#00FF00]/20 transition-colors duration-300">
                         <FontAwesomeIcon
                           icon={info.icon}
-                          className="text-neon-green text-xl"
+                          className="text-[#00FF00] text-xl"
                         />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-400">{info.label}</p>
+                        <p className="text-white/40 text-sm">{info.label}</p>
                         <p className="text-white font-medium">{info.value}</p>
                       </div>
-                    </a>
+                    </motion.a>
                   ))}
                 </div>
               </div>
 
               {/* Social Links */}
-              <div className="bg-dark-200 rounded-2xl p-8 border border-neon-green/10">
-                <h2 className="text-2xl font-bold mb-6">Follow Me</h2>
-                <div className="flex gap-4">
+              <div className="bg-white/[0.03] backdrop-blur-lg rounded-2xl p-8 border border-white/10">
+                <h2 className="text-2xl font-bold text-white mb-8">
+                  Connect With Me
+                </h2>
+                <div className="grid grid-cols-2 gap-4">
                   {socialLinks.map((social, index) => (
-                    <a
+                    <motion.a
                       key={index}
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`w-12 h-12 bg-dark-300 rounded-lg flex items-center justify-center text-gray-400 ${social.color} transition-colors`}
+                      className="flex items-center gap-4 p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-300 group"
+                      whileHover={{ y: -5 }}
                     >
-                      <FontAwesomeIcon icon={social.icon} className="text-xl" />
-                    </a>
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/[0.05] group-hover:bg-white/[0.1]">
+                        <FontAwesomeIcon
+                          icon={social.icon}
+                          className={`text-xl transition-colors duration-300 text-white/60 ${social.color}`}
+                        />
+                      </div>
+                      <span className="text-white/60 group-hover:text-white transition-colors duration-300">
+                        {social.label}
+                      </span>
+                    </motion.a>
                   ))}
                 </div>
               </div>
-            </div>
-          </ScrollAnimation>
+            </motion.div>
 
-          {/* Contact Form */}
-          <ScrollAnimation delay={0.2}>
-            <div className="bg-dark-200 rounded-2xl p-8 border border-neon-green/10">
-              <h2 className="text-2xl font-bold mb-6">Send a Message</h2>
+            {/* Contact Form */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="bg-white/[0.03] backdrop-blur-lg rounded-2xl p-8 border border-white/10"
+            >
+              <h2 className="text-2xl font-bold text-white mb-8">
+                Send a Message
+              </h2>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-gray-400 mb-2 text-sm">
+                  <div className="space-y-2">
+                    <label className="block text-white/60 text-sm">
                       Your Name
                     </label>
                     <input
@@ -211,11 +251,14 @@ export default function Contact() {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full bg-dark-300 border border-neon-green/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neon-green/30 transition-colors"
+                      className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-white
+                               focus:outline-none focus:border-[#00FF00]/30 focus:bg-white/[0.04]
+                               transition-all duration-300"
+                      placeholder="John Doe"
                     />
                   </div>
-                  <div>
-                    <label className="block text-gray-400 mb-2 text-sm">
+                  <div className="space-y-2">
+                    <label className="block text-white/60 text-sm">
                       Your Email
                     </label>
                     <input
@@ -224,43 +267,53 @@ export default function Contact() {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full bg-dark-300 border border-neon-green/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neon-green/30 transition-colors"
+                      className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-white
+                               focus:outline-none focus:border-[#00FF00]/30 focus:bg-white/[0.04]
+                               transition-all duration-300"
+                      placeholder="john@example.com"
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-gray-400 mb-2 text-sm">
-                    Subject
-                  </label>
+                <div className="space-y-2">
+                  <label className="block text-white/60 text-sm">Subject</label>
                   <input
                     type="text"
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="w-full bg-dark-300 border border-neon-green/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neon-green/30 transition-colors"
+                    className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-white
+                             focus:outline-none focus:border-[#00FF00]/30 focus:bg-white/[0.04]
+                             transition-all duration-300"
+                    placeholder="Project Discussion"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-gray-400 mb-2 text-sm">
-                    Message
-                  </label>
+                <div className="space-y-2">
+                  <label className="block text-white/60 text-sm">Message</label>
                   <textarea
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
                     required
                     rows={6}
-                    className="w-full bg-dark-300 border border-neon-green/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neon-green/30 transition-colors resize-none"
+                    className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-white
+                             focus:outline-none focus:border-[#00FF00]/30 focus:bg-white/[0.04]
+                             transition-all duration-300 resize-none"
+                    placeholder="Tell me about your project..."
                   />
                 </div>
 
-                <button
+                <motion.button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-neon-green text-dark font-semibold px-6 py-4 rounded-xl hover:bg-neon-green/90 transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-[#00FF00] text-black font-medium py-4 rounded-xl
+                           hover:bg-[#00FF00]/90 transition-all duration-300
+                           disabled:opacity-50 disabled:cursor-not-allowed
+                           flex items-center justify-center gap-2"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   {isSubmitting ? (
                     <>
@@ -276,12 +329,12 @@ export default function Contact() {
                       Send Message
                     </>
                   )}
-                </button>
+                </motion.button>
               </form>
-            </div>
-          </ScrollAnimation>
+            </motion.div>
+          </div>
         </div>
-      </div>
+      </main>
     </Layout>
   );
 }

@@ -1,186 +1,177 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faReact,
-  faHtml5,
-  faCss3Alt,
-  faJs,
-  faNode,
-  faPython,
-  faPhp,
-  faFigma,
-  faGit,
-} from "@fortawesome/free-brands-svg-icons";
-import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
 
 const technologies = [
   {
-    category: "Frontend",
-    skills: [
-      { name: "HTML5", level: 95 },
-      { name: "CSS3", level: 90 },
-      { name: "React/Next.js", level: 70 },
-      { name: "Tailwind CSS", level: 70 },
+    name: "Frontend",
+    tools: [
+      { name: "HTML", icon: "/icons/flaticon/html.png" },
+      { name: "CSS", icon: "/icons/flaticon/css.png" },
+      { name: "React", icon: "/icons/flaticon/react.png" },
+      { name: "Next.js", icon: "/icons/flaticon/nextjs.png" },
+      { name: "Tailwind", icon: "/icons/flaticon/tailwind.png" },
+      { name: "Bootstrap", icon: "/icons/flaticon/bootstrap.png" },
     ],
-    icon: faReact,
   },
   {
-    category: "Backend",
-    skills: [
-      { name: "Node.js", level: 65 },
-      { name: "Python/Flask", level: 80 },
-      { name: "PHP", level: 80 },
-      { name: "REST APIs", level: 60 },
+    name: "Languages",
+    tools: [
+      { name: "JavaScript", icon: "/icons/flaticon/javascript.png" },
+      { name: "TypeScript", icon: "/icons/flaticon/typescript.png" },
     ],
-    icon: faNode,
   },
   {
-    category: "Development Tools",
-    skills: [
-      { name: "Git & GitHub", level: 90 },
-      { name: "MongoDB", level: 85 },
-      { name: "TypeScript", level: 65 },
-      { name: "MySQL", level: 80 },
+    name: "Backend",
+    tools: [
+      { name: "MongoDB", icon: "/icons/flaticon/mongodb.png" },
+      { name: "Supabase", icon: "/icons/flaticon/supabase.png" },
+      { name: "Firebase", icon: "/icons/flaticon/firebase.png" },
+      { name: "SQL", icon: "/icons/flaticon/sql.png" },
     ],
-    icon: faJs,
   },
   {
-    category: "Design",
-    skills: [
-      { name: "UI/UX Design", level: 90 },
-      { name: "Figma", level: 95 },
-      { name: "Adobe Suite", level: 85 },
+    name: "Design",
+    tools: [
+      { name: "Figma", icon: "/icons/flaticon/figma.png" },
+      { name: "Photoshop", icon: "/icons/flaticon/photoshop.png" },
+      { name: "Illustrator", icon: "/icons/flaticon/illustrator.png" },
+      { name: "Canva", icon: "/icons/flaticon/canva.png" },
     ],
-    icon: faFigma,
+  },
+  {
+    name: "Tools",
+    tools: [
+      { name: "Git", icon: "/icons/flaticon/git.png" },
+      { name: "GitHub", icon: "/icons/flaticon/github.png" },
+      { name: "Vercel", icon: "/icons/flaticon/vercel.png" },
+      { name: "NPM", icon: "/icons/flaticon/npm.png" },
+    ],
   },
 ];
 
 export default function TechStack() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-in");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const skillBars = document.querySelectorAll(".skill-bar");
-    skillBars.forEach((bar) => observer.observe(bar));
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section className="py-20 bg-dark-200" ref={sectionRef}>
-      <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-center text-4xl font-bold mb-4 animate-fade-in">
-          Skills & <span className="text-neon-green">Technologies</span>
-        </h2>
-        <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto animate-fade-in delay-100">
-          Leveraging cutting-edge technologies to build modern digital solutions
-        </p>
+    <section className="relative py-20 bg-black overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `radial-gradient(#00FF00 0.5px, transparent 0.5px)`,
+            backgroundSize: "24px 24px",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#00FF00]/5 via-transparent to-transparent" />
+      </div>
 
-        <div className="grid md:grid-cols-4 gap-6">
-          {technologies.map((tech, techIndex) => (
-            <div
-              key={tech.category}
-              className="bg-dark p-5 rounded-xl border border-neon-green/10 hover:border-neon-green/30 transition-colors animate-slide-up"
-              style={{ animationDelay: `${techIndex * 100}ms` }}
-            >
-              {/* Category Header */}
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-10 h-10 bg-neon-green/10 rounded-xl flex items-center justify-center">
-                  <FontAwesomeIcon
-                    icon={tech.icon}
-                    className="text-neon-green text-2xl"
-                  />
-                </div>
-                <h3 className="text-lg font-bold text-white">
-                  {tech.category}
-                </h3>
-              </div>
-
-              {/* Skills */}
-              <div className="space-y-4">
-                {tech.skills.map((skill, skillIndex) => (
-                  <div key={skill.name}>
-                    <div className="flex justify-between mb-1">
-                      <span className="text-gray-400 text-sm">
-                        {skill.name}
-                      </span>
-                      <span className="text-neon-green text-sm">
-                        {skill.level}%
-                      </span>
-                    </div>
-                    <div className="h-2 bg-dark-300 rounded-full overflow-hidden">
-                      <div
-                        className="skill-bar h-full bg-neon-green/50 rounded-full transform origin-left transition-all duration-1000 ease-out"
-                        style={{
-                          width: `${skill.level}%`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="inline-block mb-4"
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-[#00FF00]/20 blur-lg rounded-full" />
+              <div className="relative bg-black border border-[#00FF00] rounded-full px-4 py-1.5">
+                <span className="text-[#00FF00] font-mono text-sm uppercase tracking-wider">
+                  Tech Stack
+                </span>
               </div>
             </div>
+          </motion.div>
+
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Technologies & Tools
+          </h2>
+          <p className="text-white/60 max-w-2xl mx-auto text-base">
+            A comprehensive toolkit for building modern web applications
+          </p>
+        </motion.div>
+
+        {/* Tech Categories */}
+        <div className="space-y-8">
+          {technologies.map((category, categoryIndex) => (
+            <motion.div
+              key={category.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
+              className="relative bg-white/[0.02] backdrop-blur-sm rounded-xl p-6 border border-white/10"
+            >
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                {/* Category Name */}
+                <div className="md:w-48 shrink-0">
+                  <h3 className="text-xl font-semibold text-white flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#00FF00]"></span>
+                    {category.name}
+                  </h3>
+                </div>
+
+                {/* Tools Grid */}
+                <div className="flex-1 w-full">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    {category.tools.map((tool, index) => (
+                      <motion.div
+                        key={tool.name}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3, delay: index * 0.05 }}
+                        className="group"
+                      >
+                        <div
+                          className="relative bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur-sm rounded-lg p-3
+                                      border border-white/5 hover:border-[#00FF00]/30 transition-all duration-300"
+                        >
+                          {/* Icon */}
+                          <div className="relative h-10 mb-2 flex items-center justify-center">
+                            <div
+                              className="absolute inset-0 bg-[#00FF00]/5 rounded-lg filter blur-lg 
+                                          group-hover:bg-[#00FF00]/10 transition-all duration-300"
+                            />
+                            <Image
+                              src={tool.icon}
+                              alt={tool.name}
+                              width={28}
+                              height={28}
+                              className="relative z-10 w-7 h-7 object-contain transition-all duration-300 
+                                       group-hover:scale-110 group-hover:brightness-110"
+                            />
+                          </div>
+
+                          {/* Name */}
+                          <p
+                            className="text-center text-xs text-white/70 group-hover:text-white
+                                      transition-colors duration-300 truncate px-1"
+                          >
+                            {tool.name}
+                          </p>
+
+                          {/* Subtle Glow */}
+                          <div
+                            className="absolute -inset-px rounded-lg opacity-0 group-hover:opacity-100
+                                        transition-all duration-300 bg-[#00FF00]/5"
+                          />
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
-
-      <style jsx global>{`
-        .animate-in .skill-bar {
-          animation: fillBar 1.5s ease-out forwards;
-        }
-
-        @keyframes fillBar {
-          from {
-            transform: scaleX(0);
-          }
-          to {
-            transform: scaleX(1);
-          }
-        }
-
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-slide-up {
-          opacity: 0;
-          animation: slideUp 0.5s ease-out forwards;
-        }
-
-        .animate-fade-in {
-          opacity: 0;
-          animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        .delay-100 {
-          animation-delay: 100ms;
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-      `}</style>
     </section>
   );
 }

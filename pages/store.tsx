@@ -14,11 +14,14 @@ import {
   faShieldAlt,
   faClock,
   faCreditCard,
+  faSearch,
+  faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 import { useCart } from "@/context/CartContext";
 import Notification from "../components/Notification";
 import { Product } from "../types/product";
 import toast from "react-hot-toast";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Store() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -34,6 +37,7 @@ export default function Store() {
   const [cursorVariant, setCursorVariant] = useState("default");
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchProducts();
@@ -51,6 +55,12 @@ export default function Store() {
       setLoading(false);
     }
   };
+
+  const filteredProducts = products.filter(
+    (product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const openProductModal = (product: Product) => {
     setSelectedProduct(product);
@@ -70,7 +80,8 @@ export default function Store() {
   const handleMouseEnter = () => setCursorVariant("hover");
   const handleMouseLeave = () => setCursorVariant("default");
 
-  const handleAddToCart = async (product: Product) => {
+  const handleAddToCart = async (e: React.MouseEvent, product: Product) => {
+    e.stopPropagation();
     setAddingToCart(product._id);
     try {
       await dispatch({
@@ -101,231 +112,286 @@ export default function Store() {
         />
       </Head>
 
-      <div className="min-h-screen bg-dark">
-        {/* Hero Section */}
-        <div className="bg-dark-200 border-b border-neon-green/10">
-          <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Digital <span className="text-neon-green">Products</span>
-              </h1>
-              <p className="text-gray-400 max-w-2xl mx-auto">
-                Explore our collection of premium digital products designed to
-                elevate your creative projects.
-              </p>
-            </div>
-          </div>
+      <main className="min-h-screen bg-black pt-32 pb-24">
+        {/* Background Elements */}
+        <div className="fixed inset-0 z-0">
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: `radial-gradient(#00FF00 0.5px, transparent 0.5px)`,
+              backgroundSize: "24px 24px",
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#00FF00]/5 via-transparent to-transparent" />
         </div>
 
-        {/* Products Grid */}
-        <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <FontAwesomeIcon
-                icon={faSpinner}
-                className="text-neon-green text-4xl animate-spin"
-              />
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {products.map((product) => (
-                <div
-                  key={product._id}
-                  onClick={() => openProductModal(product)}
-                  className="bg-dark-200 rounded-xl border border-neon-green/10 overflow-hidden hover:border-neon-green/30 transition-all duration-300 group cursor-pointer"
-                >
-                  {/* Product Image */}
-                  <div className="relative aspect-square">
-                    <Image
-                      src={product.image || "/default-product-image.jpg"}
-                      alt={product.name}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </div>
-
-                  {/* Product Info */}
-                  <div className="p-4 space-y-3">
-                    <h3 className="text-lg font-bold text-white line-clamp-1">
-                      {product.name}
-                    </h3>
-                    <p className="text-gray-400 text-sm line-clamp-2">
-                      {product.description || "No description available"}
-                    </p>
-
-                    {/* Features */}
-                    <div className="space-y-2">
-                      {product.features && product.features.length > 0 ? (
-                        <>
-                          {product.features
-                            .slice(0, 3)
-                            .map((feature, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center text-sm text-gray-300"
-                              >
-                                <FontAwesomeIcon
-                                  icon={faCheck}
-                                  className="text-neon-green mr-2 text-xs"
-                                />
-                                {feature}
-                              </div>
-                            ))}
-                          {product.features.length > 3 && (
-                            <div
-                              className="text-sm text-neon-green cursor-pointer hover:underline"
-                              onClick={() => openProductModal(product)}
-                            >
-                              +{product.features.length - 3} more features
-                            </div>
-                          )}
-                        </>
-                      ) : (
-                        <div className="text-sm text-gray-400">
-                          Features not available
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Price and Action */}
-                    <div className="flex items-center justify-between pt-3 border-t border-neon-green/10">
-                      <p className="text-xl font-bold text-neon-green">
-                        ₦{(product.price || 0).toLocaleString()}
-                      </p>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openProductModal(product);
-                        }}
-                        className="bg-neon-green text-dark px-4 py-2 rounded-lg font-semibold hover:bg-neon-green/90 transition-colors flex items-center gap-2 text-sm"
-                      >
-                        <FontAwesomeIcon icon={faCreditCard} />
-                        Buy Now
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Features Section */}
-        <div className="bg-dark-200 border-t border-neon-green/10 py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-neon-green/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <FontAwesomeIcon
-                    icon={faShieldAlt}
-                    className="text-2xl text-neon-green"
-                  />
-                </div>
-                <h3 className="text-lg font-bold mb-2">Secure Payments</h3>
-                <p className="text-gray-400 text-sm">
-                  Your transactions are safe and secure with us
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-neon-green/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <FontAwesomeIcon
-                    icon={faClock}
-                    className="text-2xl text-neon-green"
-                  />
-                </div>
-                <h3 className="text-lg font-bold mb-2">Instant Delivery</h3>
-                <p className="text-gray-400 text-sm">
-                  Get your digital products instantly after purchase
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-neon-green/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <FontAwesomeIcon
-                    icon={faTag}
-                    className="text-2xl text-neon-green"
-                  />
-                </div>
-                <h3 className="text-lg font-bold mb-2">Best Value</h3>
-                <p className="text-gray-400 text-sm">
-                  Premium quality products at competitive prices
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Purchase Modal */}
-      {isPurchaseModalOpen && selectedProduct && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="glass-card p-6 rounded-2xl max-w-md w-full mx-4">
-            <h2 className="text-2xl font-bold mb-4 text-gradient-animate">
-              Purchase {selectedProduct.name}
-            </h2>
-            <p className="text-xl font-bold text-[#2B3FF3] mb-4">
-              ₦{selectedProduct.price.toLocaleString()}
-            </p>
-            <div className="flex flex-col space-y-4">
-              {selectedProduct.selarLink && (
-                <a
-                  href={selectedProduct.selarLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="minimalist-button"
-                >
-                  Purchase on Selar
-                </a>
-              )}
-
-              {selectedProduct.purchaseOption !== "SELAR_ONLY" && (
-                <button
-                  onClick={() => {
-                    dispatch({
-                      type: "ADD_ITEM",
-                      payload: {
-                        id: selectedProduct._id,
-                        name: selectedProduct.name,
-                        price: selectedProduct.price,
-                        image:
-                          selectedProduct.image || "/default-product-image.jpg",
-                        quantity: 1,
-                      },
-                    });
-                    setNotification({
-                      show: true,
-                      message: `${selectedProduct.name} added to cart!`,
-                    });
-                    setIsPurchaseModalOpen(false);
-                  }}
-                  className="minimalist-button-outline"
-                >
-                  Add to Cart
-                </button>
-              )}
-            </div>
-            <button
-              onClick={() => setIsPurchaseModalOpen(false)}
-              className="mt-4 text-red-500 hover:text-red-600 transition-colors"
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="inline-block mb-4"
             >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+              <div className="relative">
+                <div className="absolute inset-0 bg-[#00FF00]/20 blur-lg rounded-full" />
+                <div className="relative bg-black border border-[#00FF00] rounded-full px-4 py-1.5">
+                  <span className="text-[#00FF00] font-mono text-sm uppercase tracking-wider">
+                    Digital Products
+                  </span>
+                </div>
+              </div>
+            </motion.div>
 
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Premium Digital Products
+            </h1>
+            <p className="text-white/60 max-w-2xl mx-auto text-lg">
+              Explore our collection of high-quality digital products designed
+              to elevate your creative projects.
+            </p>
+          </motion.div>
+
+          {/* Search and Filter */}
+          <div className="mb-12">
+            <div className="max-w-2xl mx-auto">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full bg-white/[0.03] backdrop-blur-lg border border-white/10 rounded-xl px-4 py-3 pl-12
+                           text-white placeholder-white/40 focus:outline-none focus:border-[#00FF00]/30
+                           transition-all duration-300"
+                />
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Products Grid */}
+          <div className="mb-24">
+            {loading ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center justify-center h-64 space-y-4"
+              >
+                <FontAwesomeIcon
+                  icon={faSpinner}
+                  className="text-[#00FF00] text-4xl animate-spin"
+                />
+                <p className="text-white/60">Loading products...</p>
+              </motion.div>
+            ) : (
+              <AnimatePresence mode="popLayout">
+                <motion.div
+                  layout
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                >
+                  {filteredProducts.map((product, index) => (
+                    <motion.div
+                      key={product._id}
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      onClick={() => openProductModal(product)}
+                      className="group cursor-pointer"
+                    >
+                      <div
+                        className="bg-white/[0.03] backdrop-blur-lg rounded-2xl border border-white/10
+                                    hover:border-[#00FF00]/30 transition-all duration-500
+                                    overflow-hidden relative group/card"
+                      >
+                        {/* Product Image */}
+                        <div className="relative aspect-[16/10] overflow-hidden">
+                          <Image
+                            src={product.image || "/default-product-image.jpg"}
+                            alt={product.name}
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                          {/* Quick Action Buttons - Appear on Hover */}
+                          <div className="absolute bottom-4 right-4 flex gap-2 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={(
+                                e: React.MouseEvent<HTMLButtonElement>
+                              ) => handleAddToCart(e, product)}
+                              disabled={addingToCart === product._id}
+                              className="p-2.5 rounded-lg bg-white/10 backdrop-blur-md hover:bg-white/20 text-white
+                                       transition-all duration-300 border border-white/20"
+                            >
+                              {addingToCart === product._id ? (
+                                <FontAwesomeIcon
+                                  icon={faSpinner}
+                                  className="animate-spin"
+                                />
+                              ) : (
+                                <FontAwesomeIcon icon={faShoppingCart} />
+                              )}
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={(
+                                e: React.MouseEvent<HTMLButtonElement>
+                              ) => handlePurchaseNow(e, product)}
+                              className="px-4 py-2 rounded-lg bg-[#00FF00] text-black font-medium
+                                       hover:bg-[#00FF00]/90 transition-all duration-300"
+                            >
+                              Buy Now
+                            </motion.button>
+                          </div>
+                        </div>
+
+                        {/* Product Info */}
+                        <div className="p-6">
+                          {/* Category Tag */}
+                          <div className="mb-4">
+                            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-white/5 text-[#00FF00]/80 border border-[#00FF00]/20">
+                              {product.category || "Digital Product"}
+                            </span>
+                          </div>
+
+                          {/* Title and Description */}
+                          <div className="mb-6">
+                            <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-[#00FF00] transition-colors duration-300">
+                              {product.name}
+                            </h3>
+                            <p className="text-white/60 text-sm line-clamp-2 leading-relaxed">
+                              {product.description ||
+                                "No description available"}
+                            </p>
+                          </div>
+
+                          {/* Features */}
+                          <div className="space-y-2 mb-6">
+                            {product.features && product.features.length > 0 ? (
+                              <>
+                                {product.features
+                                  .slice(0, 2)
+                                  .map((feature, index) => (
+                                    <div
+                                      key={index}
+                                      className="flex items-center text-sm text-white/60"
+                                    >
+                                      <div className="w-1.5 h-1.5 rounded-full bg-[#00FF00]/40 mr-2 group-hover:bg-[#00FF00] transition-colors duration-300" />
+                                      {feature}
+                                    </div>
+                                  ))}
+                                {product.features.length > 2 && (
+                                  <p className="text-sm text-[#00FF00]/80 hover:text-[#00FF00] cursor-pointer transition-colors duration-300">
+                                    +{product.features.length - 2} more features
+                                  </p>
+                                )}
+                              </>
+                            ) : (
+                              <p className="text-sm text-white/40">
+                                Features not available
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Price */}
+                          <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                            <div>
+                              <p className="text-sm text-white/40 mb-1">
+                                Price
+                              </p>
+                              <p className="text-2xl font-bold text-white group-hover:text-[#00FF00] transition-colors duration-300">
+                                ₦{(product.price || 0).toLocaleString()}
+                              </p>
+                            </div>
+                            <div className="h-8 w-8 rounded-full bg-[#00FF00]/10 flex items-center justify-center group-hover:bg-[#00FF00]/20 transition-all duration-300">
+                              <FontAwesomeIcon
+                                icon={faArrowRight}
+                                className="text-[#00FF00] text-sm"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+            )}
+          </div>
+
+          {/* Features Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            {[
+              {
+                icon: faShieldAlt,
+                title: "Secure Payments",
+                description:
+                  "Your transactions are protected with industry-standard security",
+              },
+              {
+                icon: faClock,
+                title: "Instant Delivery",
+                description:
+                  "Get immediate access to your digital products after purchase",
+              },
+              {
+                icon: faTag,
+                title: "Best Value",
+                description:
+                  "Premium quality products at competitive market prices",
+              },
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white/[0.03] backdrop-blur-lg rounded-2xl p-8 border border-white/10
+                         hover:border-[#00FF00]/30 transition-all duration-300"
+              >
+                <div className="w-14 h-14 bg-[#00FF00]/10 rounded-xl flex items-center justify-center mb-6">
+                  <FontAwesomeIcon
+                    icon={feature.icon}
+                    className="text-2xl text-[#00FF00]"
+                  />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-white/60">{feature.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </main>
+
+      {/* Product Modal */}
       <ProductModal
         product={selectedProduct}
         isOpen={isModalOpen}
-        closeModal={() => {
-          setIsModalOpen(false);
-          setSelectedProduct(null);
-        }}
-      />
-
-      <Notification
-        message={notification.message}
-        isVisible={notification.show}
-        onClose={() => setNotification({ show: false, message: "" })}
+        closeModal={() => setIsModalOpen(false)}
       />
     </Layout>
   );
